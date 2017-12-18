@@ -51,9 +51,21 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        List<Resume> result = Arrays.asList(storage);
-        storage = result.toArray(new Resume[result.size()]);
-        return storage;
+        int count = 0;
+        for (Resume r: storage) {
+            if(r != null) {
+                count++;
+            }
+        }
+        Resume[] result = new Resume[count];
+        count = 0;
+        for (Resume r: storage) {
+            if(r != null) {
+                result[count] = r;
+                count++;
+            }
+        }
+        return result;
     }
 
     int size() {
