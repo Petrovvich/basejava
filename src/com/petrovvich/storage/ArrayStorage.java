@@ -7,7 +7,7 @@ import java.util.List;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10];
+    Resume[] storage = new Resume[10000];
 
     void clear() {
         for (int i = 0; i < storage.length; i++) {
@@ -69,11 +69,6 @@ public class ArrayStorage {
     }
 
     int size() {
-        return storage.length;
-    }
-
-
-    public static void main(String[] args) {
-
+        return getAll().length;
     }
 }
