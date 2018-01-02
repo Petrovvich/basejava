@@ -15,7 +15,7 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        if (sizeOfArray == 100000) {
+        if (sizeOfArray == storage.length) {
             System.out.println("База резюме заполнена, удалите элементы, прежде чем вставлять новые");
         } else {
             storage[sizeOfArray] = r;
