@@ -15,12 +15,11 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                storage[i] = r;
-                sizeOfArray++;
-                break;
-            }
+        if (sizeOfArray == 100000) {
+            System.out.println("База резюме заполнена, удалите элементы, прежде чем вставлять новые");
+        } else {
+            storage[sizeOfArray] = r;
+            sizeOfArray++;
         }
     }
 
@@ -60,6 +59,6 @@ public class ArrayStorage {
     }
 
     int size() {
-        return getAll().length;
+        return sizeOfArray;
     }
 }
