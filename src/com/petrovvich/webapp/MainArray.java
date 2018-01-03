@@ -1,7 +1,9 @@
-package com.petrovvich.storage;
+package com.petrovvich.webapp;
 
-import java.io.BufferedReader;
+import com.petrovvich.webapp.model.Resume;
+import com.petrovvich.webapp.storage.ArrayStorage;
 import java.io.IOException;
+import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 /**

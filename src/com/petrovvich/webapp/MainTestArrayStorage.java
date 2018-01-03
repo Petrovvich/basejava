@@ -1,4 +1,7 @@
-package com.petrovvich.storage;
+package com.petrovvich.webapp;
+
+import com.petrovvich.webapp.model.Resume;
+import com.petrovvich.webapp.storage.ArrayStorage;
 
 /**
  * Test for com.urise.webapp.storage.ArrayStorage

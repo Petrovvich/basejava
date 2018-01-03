@@ -1,6 +1,7 @@
-package com.petrovvich.storage;
+package com.petrovvich.webapp.storage;
 
 import java.util.Arrays;
+import com.petrovvich.webapp.model.Resume;
 
 /**
  * Array based storage for Resumes
@@ -9,14 +10,14 @@ public class ArrayStorage {
     Resume[] storage = new Resume[10000];
     private int sizeOfArray = 0;
 
-    void clear() {
+    public void clear() {
         for (int i = 0; i < storage.length; i++) {
             storage[i] = null;
         }
         sizeOfArray = 0;
     }
 
-    void save(Resume r) {
+    public void save(Resume r) {
         if (sizeOfArray == storage.length) {
             System.out.println("База резюме заполнена, удалите элементы, прежде чем вставлять новые");
         } else {
@@ -25,7 +26,7 @@ public class ArrayStorage {
         }
     }
 
-    Resume get(String uuid) {
+    public Resume get(String uuid) {
         Resume result = null;
         for (int i = 0; i < sizeOfArray; i++) {
             if (storage[i] != null && storage[i].toString().equals(uuid)) {
@@ -36,7 +37,7 @@ public class ArrayStorage {
         return result;
     }
 
-    void delete(String uuid) {
+    public void delete(String uuid) {
         for (int i = 0; i < sizeOfArray; i++) {
             if (storage[i] != null && storage[i].toString().equals(uuid)) {
                 storage[i] = null;
@@ -53,11 +54,11 @@ public class ArrayStorage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll() {
+    public Resume[] getAll() {
         return Arrays.copyOf(storage, sizeOfArray);
     }
 
-    int size() {
+    public int size() {
         return sizeOfArray;
     }
 }
