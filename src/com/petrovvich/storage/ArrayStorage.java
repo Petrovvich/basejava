@@ -40,6 +40,7 @@ public class ArrayStorage {
         for (int i = 0; i < sizeOfArray; i++) {
             if (storage[i] != null && storage[i].toString().equals(uuid)) {
                 storage[i] = null;
+                sizeOfArray--;
             }
             if (storage[i] == null){
                 Resume temp = storage[i];
@@ -47,7 +48,6 @@ public class ArrayStorage {
                 storage[i+1] = temp;
             }
         }
-        sizeOfArray--;
     }
 
     /**
