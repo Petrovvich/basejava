@@ -1,5 +1,7 @@
 package com.petrovvich.storage;
 
+import java.util.Arrays;
+
 /**
  * Array based storage for Resumes
  */
@@ -25,37 +27,34 @@ public class ArrayStorage {
 
     Resume get(String uuid) {
         Resume result = null;
-        for (int i = 0; i < storage.length; i++) {
+        for (int i = 0; i < sizeOfArray; i++) {
             if (storage[i] != null && storage[i].toString().equals(uuid)) {
                 result = storage[i];
+                break;
             }
         }
         return result;
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < storage.length; i++) {
+        for (int i = 0; i < sizeOfArray; i++) {
             if (storage[i] != null && storage[i].toString().equals(uuid)) {
                 storage[i] = null;
-                sizeOfArray--;
-                break;
+            }
+            if (storage[i] == null){
+                Resume temp = storage[i];
+                storage[i]=storage[i+1];
+                storage[i+1] = temp;
             }
         }
+        sizeOfArray--;
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] result = new Resume[sizeOfArray];
-        sizeOfArray = 0;
-        for (Resume r: storage) {
-            if(r != null) {
-                result[sizeOfArray] = r;
-                sizeOfArray++;
-            }
-        }
-        return result;
+        return Arrays.copyOf(storage, sizeOfArray);
     }
 
     int size() {
