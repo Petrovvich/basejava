@@ -17,9 +17,31 @@ public class ArrayStorage {
         sizeOfArray = 0;
     }
 
+    public void update(Resume r) {
+        for (int i = 0; i < sizeOfArray; i++) {
+            if (storage[i].toString().equals(r.getUuid())) {
+                storage[i].setUuid(r.getUuid());
+                break;
+            } else {
+                System.out.println("Резюме не найдено");
+            }
+        }
+    }
+
+    private boolean findResume (Resume r) {
+        for (int i = 0; i < sizeOfArray; i++) {
+            if (storage[i] != null && storage[i].toString().equals(r.getUuid())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void save(Resume r) {
         if (sizeOfArray == storage.length) {
-            System.out.println("База резюме заполнена, удалите элементы, прежде чем вставлять новые");
+            System.out.println("База резюме заполнена, удалите элементы, прежде чем вставлять новые!");
+        } else if (findResume(r)) {
+            System.out.println("Такое резюме уже есть в базе!");
         } else {
             storage[sizeOfArray] = r;
             sizeOfArray++;
@@ -40,13 +62,9 @@ public class ArrayStorage {
     public void delete(String uuid) {
         for (int i = 0; i < sizeOfArray; i++) {
             if (storage[i] != null && storage[i].toString().equals(uuid)) {
-                storage[i] = null;
+                storage[i] = storage[sizeOfArray - 1];
+                storage[sizeOfArray - 1] = null;
                 sizeOfArray--;
-            }
-            if (storage[i] == null){
-                Resume temp = storage[i];
-                storage[i]=storage[i+1];
-                storage[i+1] = temp;
             }
         }
     }
