@@ -18,30 +18,20 @@ public class ArrayStorage {
     }
 
     public void update(Resume r) {
-        for (int i = 0; i < sizeOfArray; i++) {
-            if (storage[i].toString().equals(r.getUuid())) {
-                storage[i].setUuid(r.getUuid());
-                break;
-            } else {
-                System.out.println("Резюме не найдено");
-            }
+        int index = getIndex(r.getUuid());
+        if (index == -1) {
+            System.out.println("Резюме не найдено");
+        } else {
+            storage[index] = r;
         }
-    }
-
-    private boolean findResume (Resume r) {
-        for (int i = 0; i < sizeOfArray; i++) {
-            if (storage[i] != null && storage[i].toString().equals(r.getUuid())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public void save(Resume r) {
-        if (sizeOfArray == storage.length) {
-            System.out.println("База резюме заполнена, удалите элементы, прежде чем вставлять новые!");
-        } else if (findResume(r)) {
+        int index = getIndex(r.getUuid());
+        if (index >= 0) {
             System.out.println("Такое резюме уже есть в базе!");
+        } else if (sizeOfArray == storage.length) {
+            System.out.println("База резюме заполнена, удалите элементы, прежде чем вставлять новые!");
         } else {
             storage[sizeOfArray] = r;
             sizeOfArray++;
@@ -49,26 +39,33 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        Resume result = null;
-        for (int i = 0; i < sizeOfArray; i++) {
-            if (storage[i] != null && storage[i].toString().equals(uuid)) {
-                result = storage[i];
-                break;
-            }
+        int index = getIndex(uuid);
+        if (index < 0) {
+            System.out.println("Такого резюме нет в базе");
+            return null;
         }
-        return result;
+        return storage[index];
     }
 
     public void delete(String uuid) {
-        for (int i = 0; i < sizeOfArray; i++) {
-            if (storage[i] != null && storage[i].toString().equals(uuid)) {
-                storage[i] = storage[sizeOfArray - 1];
-                storage[sizeOfArray - 1] = null;
-                sizeOfArray--;
-            }
+        int index = getIndex(uuid);
+        if (index < 0) {
+            System.out.println("Такого резюме нет в базе");
+        } else {
+            storage[index] = storage[sizeOfArray - 1];
+            storage[sizeOfArray - 1] = null;
+            sizeOfArray--;
         }
     }
 
+    private int getIndex(String uuid) {
+        for (int i = 0; i < sizeOfArray; i++) {
+            if (storage[i].toString().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
+    }
     /**
      * @return array, contains only Resumes in storage (without null)
      */
