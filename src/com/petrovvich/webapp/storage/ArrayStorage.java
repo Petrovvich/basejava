@@ -7,13 +7,14 @@ import com.petrovvich.webapp.model.Resume;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+    private static final int STORAGE_CAPACITY = 10000;
+
+    private Resume[] storage = new Resume[STORAGE_CAPACITY];
+
     private int sizeOfArray = 0;
 
     public void clear() {
-        for (int i = 0; i < storage.length; i++) {
-            storage[i] = null;
-        }
+        Arrays.fill(storage, 0, sizeOfArray, null);
         sizeOfArray = 0;
     }
 
@@ -30,7 +31,7 @@ public class ArrayStorage {
         int index = getIndex(r.getUuid());
         if (index >= 0) {
             System.out.println("Такое резюме уже есть в базе!");
-        } else if (sizeOfArray == storage.length) {
+        } else if (sizeOfArray == STORAGE_CAPACITY) {
             System.out.println("База резюме заполнена, удалите элементы, прежде чем вставлять новые!");
         } else {
             storage[sizeOfArray] = r;
