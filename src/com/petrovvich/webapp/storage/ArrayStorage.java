@@ -8,7 +8,7 @@ import com.petrovvich.webapp.model.Resume;
  */
 public class ArrayStorage {
 
-    private Resume[] storage = new Resume[10000];
+    private Resume[] storage = new Resume[3];
 
     private int sizeOfArray = 0;
 
