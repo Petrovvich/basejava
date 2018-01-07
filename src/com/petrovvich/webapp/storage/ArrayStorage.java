@@ -7,9 +7,8 @@ import com.petrovvich.webapp.model.Resume;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private static final int STORAGE_CAPACITY = 10000;
 
-    private Resume[] storage = new Resume[STORAGE_CAPACITY];
+    private Resume[] storage = new Resume[10000];
 
     private int sizeOfArray = 0;
 
@@ -31,7 +30,7 @@ public class ArrayStorage {
         int index = getIndex(r.getUuid());
         if (index >= 0) {
             System.out.println("Такое резюме уже есть в базе!");
-        } else if (sizeOfArray == STORAGE_CAPACITY) {
+        } else if (sizeOfArray == storage.length) {
             System.out.println("База резюме заполнена, удалите элементы, прежде чем вставлять новые!");
         } else {
             storage[sizeOfArray] = r;
