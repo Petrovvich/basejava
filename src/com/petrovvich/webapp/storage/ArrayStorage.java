@@ -18,12 +18,12 @@ public class ArrayStorage {
         sizeOfArray = 0;
     }
 
-    public void update(Resume r) {
-        int index = getIndex(r.getUuid());
+    public void update(Resume updated, Resume updating) {
+        int index = getIndex(updated.getUuid());
         if (index == -1) {
             System.out.println("Резюме не найдено");
         } else {
-            storage[index] = r;
+            storage[index] = updating;
         }
     }
 
