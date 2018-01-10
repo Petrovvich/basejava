@@ -14,16 +14,6 @@ public class ArrayStorage extends AbstractArrayStorage {
     private int sizeOfArray = 0;
 
     @Override
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index == -1) {
-            System.out.println("Резюме не найдено");
-        } else {
-            storage[index] = resume;
-        }
-    }
-
-    @Override
     public void save(Resume r) {
         int index = getIndex(r.getUuid());
         if (index >= 0) {
@@ -33,6 +23,16 @@ public class ArrayStorage extends AbstractArrayStorage {
         } else {
             storage[sizeOfArray] = r;
             sizeOfArray++;
+        }
+    }
+
+    @Override
+    public void update(Resume resume) {
+        int index = getIndex(resume.getUuid());
+        if (index == -1) {
+            System.out.println("Резюме не найдено");
+        } else {
+            storage[index] = resume;
         }
     }
 
@@ -48,9 +48,9 @@ public class ArrayStorage extends AbstractArrayStorage {
         }
     }
 
-    private int getIndex(String uuid) {
+    protected int getIndex(String uuid) {
         for (int i = 0; i < sizeOfArray; i++) {
-            if (storage[i].toString().equals(uuid)) {
+            if (uuid.equals(storage[i].getUuid())) {
                 return i;
             }
         }

@@ -7,12 +7,12 @@ import java.util.Arrays;
 /**
  * Array based storage for Resumes
  */
-public class AbstractArrayStorage implements Storage {
+public abstract class AbstractArrayStorage implements Storage {
     private static final int STORAGE_CAPACITY = 10000;
 
-    private Resume[] storage = new Resume[STORAGE_CAPACITY];
+    protected Resume[] storage = new Resume[STORAGE_CAPACITY];
 
-    private int sizeOfArray = 0;
+    protected int sizeOfArray = 0;
 
     @Override
     public void clear() {
@@ -65,14 +65,7 @@ public class AbstractArrayStorage implements Storage {
         }
     }
 
-    private int getIndex(String uuid) {
-        for (int i = 0; i < sizeOfArray; i++) {
-            if (storage[i].toString().equals(uuid)) {
-                return i;
-            }
-        }
-        return -1;
-    }
+    protected abstract int getIndex(String uuid);
 
     /**
      * @return array, contains only Resumes in storage (without null)
