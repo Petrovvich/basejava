@@ -38,12 +38,12 @@ public abstract class AbstractArrayStorage implements Storage {
         } else if (sizeOfArray == STORAGE_CAPACITY) {
             System.out.println("База резюме заполнена, удалите элементы, прежде чем вставлять новые!");
         } else {
-            insertElement(r, index);
+            insertElement(r);
             sizeOfArray++;
         }
     }
 
-    protected abstract void insertElement(Resume r, int index);
+    protected abstract void insertElement(Resume r);
 
     @Override
     public Resume get(String uuid) {

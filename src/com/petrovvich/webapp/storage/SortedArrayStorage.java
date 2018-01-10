@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
 
-    protected void insertElement(Resume r, int index) {
+    protected void insertElement(Resume r) {
         /**
          * Метод интересный, но нерабочий.
          * При вставке двухзначных и более значений сортировка ведется по первому символу и может получиться так, что
