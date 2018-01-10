@@ -8,7 +8,7 @@ import com.petrovvich.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void insertElement(Resume r) {
+    protected void insertElement(Resume r, int index) {
         storage[sizeOfArray] = r;
     }
 
