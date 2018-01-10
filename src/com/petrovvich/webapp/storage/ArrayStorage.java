@@ -8,16 +8,6 @@ import com.petrovvich.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index == -1) {
-            System.out.println("Резюме не найдено");
-        } else {
-            storage[index] = resume;
-        }
-    }
-
-    @Override
     protected void insertElement(Resume r) {
         storage[sizeOfArray] = r;
     }
