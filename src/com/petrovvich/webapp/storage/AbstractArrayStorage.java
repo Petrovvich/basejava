@@ -1,17 +1,24 @@
 package com.petrovvich.webapp.storage;
 
-import java.util.Arrays;
 import com.petrovvich.webapp.model.Resume;
+
+import java.util.Arrays;
 
 /**
  * Array based storage for Resumes
  */
-public class ArrayStorage extends AbstractArrayStorage {
+public class AbstractArrayStorage implements Storage {
     private static final int STORAGE_CAPACITY = 10000;
 
     private Resume[] storage = new Resume[STORAGE_CAPACITY];
 
     private int sizeOfArray = 0;
+
+    @Override
+    public void clear() {
+        Arrays.fill(storage, 0, sizeOfArray, null);
+        sizeOfArray = 0;
+    }
 
     @Override
     public void update(Resume resume) {
@@ -37,6 +44,16 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
+    public Resume get(String uuid) {
+        int index = getIndex(uuid);
+        if (index < 0) {
+            System.out.println("Такого резюме нет в базе");
+            return null;
+        }
+        return storage[index];
+    }
+
+    @Override
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
@@ -55,5 +72,18 @@ public class ArrayStorage extends AbstractArrayStorage {
             }
         }
         return -1;
+    }
+
+    /**
+     * @return array, contains only Resumes in storage (without null)
+     */
+    @Override
+    public Resume[] getAll() {
+        return Arrays.copyOf(storage, sizeOfArray);
+    }
+
+    @Override
+    public int size() {
+        return sizeOfArray;
     }
 }
