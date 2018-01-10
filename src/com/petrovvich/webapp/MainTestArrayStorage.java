@@ -2,13 +2,14 @@ package com.petrovvich.webapp;
 
 import com.petrovvich.webapp.model.Resume;
 import com.petrovvich.webapp.storage.ArrayStorage;
+import com.petrovvich.webapp.storage.SortedArrayStorage;
 import com.petrovvich.webapp.storage.Storage;
 
 /**
  * Test for com.urise.webapp.storage.ArrayStorage
  */
 public class MainTestArrayStorage {
-    private static final Storage ARRAY_STORAGE = new ArrayStorage();
+    private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) {
         final Resume r1 = new Resume();

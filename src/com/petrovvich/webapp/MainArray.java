@@ -2,6 +2,7 @@ package com.petrovvich.webapp;
 
 import com.petrovvich.webapp.model.Resume;
 import com.petrovvich.webapp.storage.ArrayStorage;
+import com.petrovvich.webapp.storage.SortedArrayStorage;
 import com.petrovvich.webapp.storage.Storage;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.io.InputStreamReader;
   Test for com.urise.webapp.storage.ArrayStorage
 */
 public class MainArray {
-    private final static Storage ARRAY_STORAGE = new ArrayStorage();
+    private final static Storage ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
