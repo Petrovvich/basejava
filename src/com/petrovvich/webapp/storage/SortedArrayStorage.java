@@ -15,7 +15,10 @@ public class SortedArrayStorage extends AbstractArrayStorage {
          * System.arraycopy(storage, indexToInsert, storage, indexToInsert + 1, sizeOfArray - indexToInsert);
          * storage[indexToInsert] = r;
          */
-
+        storage[sizeOfArray] = r;
+        if (sizeOfArray> 0) {
+            Arrays.sort(storage, 0, sizeOfArray + 1);
+        }
 
     }
 
