@@ -19,8 +19,7 @@ public class MainReflection {
         System.out.println(r);
 
         //Optional homework for HW4
-        Method method = r.getClass().getDeclaredMethods()[1];
-        System.out.println(method.invoke(r));
+        System.out.println(r.getClass().getDeclaredMethods()[1].invoke(r));
 
     }
 }
