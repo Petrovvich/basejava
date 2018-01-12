@@ -1,5 +1,8 @@
 package com.petrovvich.webapp.storage;
 
+import com.petrovvich.webapp.exception.ExistStorageException;
+import com.petrovvich.webapp.exception.NotExistStorageException;
+import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -23,8 +26,8 @@ public abstract class AbstractArrayStorage implements Storage {
     @Override
     public void update(Resume resume) {
         int index = getIndex(resume.getUuid());
-        if (index == -1) {
-            System.out.println("Резюме не найдено");
+        if (index < 0) {
+            throw new NotExistStorageException(resume.getUuid());
         } else {
             storage[index] = resume;
         }
@@ -34,9 +37,9 @@ public abstract class AbstractArrayStorage implements Storage {
     public void save(Resume r) {
         int index = getIndex(r.getUuid());
         if (index >= 0) {
-            System.out.println("Такое резюме уже есть в базе!");
+            throw new ExistStorageException(r.getUuid());
         } else if (sizeOfArray == STORAGE_CAPACITY) {
-            System.out.println("База резюме заполнена, удалите элементы, прежде чем вставлять новые!");
+            throw new StorageException("База резюме переполнена!", r.getUuid());
         } else {
             insertElement(r, index);
             sizeOfArray++;
@@ -49,8 +52,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            System.out.println("Такого резюме нет в базе");
-            return null;
+            throw new NotExistStorageException(uuid);
         }
         return storage[index];
     }
@@ -59,7 +61,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            System.out.println("Такого резюме нет в базе");
+            throw new NotExistStorageException(uuid);
         } else {
             deleteElement(index);
             storage[sizeOfArray - 1] = null;
