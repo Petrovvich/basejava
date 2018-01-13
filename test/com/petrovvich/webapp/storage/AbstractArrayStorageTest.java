@@ -6,9 +6,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
-public abstract class AbstractArrayStorageTest {
+public class AbstractArrayStorageTest {
 
     private Storage storage = new ArrayStorage();
 
@@ -26,19 +28,27 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void clear() throws Exception {
-
+        storage.clear();
+        Assert.assertEquals(0, storage.size());
     }
 
     @Test
     public void update() throws Exception {
+
     }
 
     @Test
     public void save() throws Exception {
+        Resume testResume = new Resume("123456");
+        storage.save(testResume);
+        Assert.assertEquals(4, storage.size());
+        Assert.assertSame(testResume, storage.get("123456"));
     }
 
     @Test
     public void get() throws Exception {
+        Resume testResume = new Resume("uuid1");
+        Assert.assertSame("uuid1", storage.get("uuid1").toString());
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -48,10 +58,14 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void delete() throws Exception {
+        storage.delete("uuid1");
+        Assert.assertEquals(2, storage.size());
     }
 
     @Test
     public void getAll() throws Exception {
+        Resume[] resilt = storage.getAll();
+        Assert.assertArrayEquals(resilt, storage.getAll());
     }
 
     @Test
