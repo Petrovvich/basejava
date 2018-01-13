@@ -34,11 +34,13 @@ public class AbstractArrayStorageTest {
 
     @Test
     public void update() throws Exception {
+        Assert.assertEquals(3, storage.size());
 
     }
 
     @Test
     public void save() throws Exception {
+        Assert.assertEquals(3, storage.size());
         Resume testResume = new Resume("123456");
         storage.save(testResume);
         Assert.assertEquals(4, storage.size());
@@ -47,8 +49,8 @@ public class AbstractArrayStorageTest {
 
     @Test
     public void get() throws Exception {
-        Resume testResume = new Resume("uuid1");
-        Assert.assertSame("uuid1", storage.get("uuid1").toString());
+        String find = "uuid1";
+        Assert.assertSame(find, storage.get("uuid1").toString());
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -58,14 +60,15 @@ public class AbstractArrayStorageTest {
 
     @Test
     public void delete() throws Exception {
+        Assert.assertEquals(3, storage.size());
         storage.delete("uuid1");
         Assert.assertEquals(2, storage.size());
     }
 
     @Test
     public void getAll() throws Exception {
-        Resume[] resilt = storage.getAll();
-        Assert.assertArrayEquals(resilt, storage.getAll());
+        Resume[] result = storage.getAll();
+        Assert.assertArrayEquals(result, storage.getAll());
     }
 
     @Test

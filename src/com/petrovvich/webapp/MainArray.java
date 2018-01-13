@@ -51,6 +51,11 @@ public class MainArray {
                     ARRAY_STORAGE.clear();
                     printAll();
                     break;
+                case "update":
+                    r = new Resume(uuid);
+                    ARRAY_STORAGE.update(r);
+                    printAll();
+                    break;
                 case "exit":
                     return;
                 default:
@@ -60,7 +65,7 @@ public class MainArray {
         }
     }
 
-    static void printAll() {
+    private static void printAll() {
         Resume[] all = ARRAY_STORAGE.getAll();
         System.out.println("----------------------------");
         if (all.length == 0) {
