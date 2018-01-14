@@ -6,8 +6,6 @@ import com.petrovvich.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,17 +17,19 @@ public abstract class AbstractArrayStorageTest {
     protected AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
     }
-
     private static final String UUID_1 = "uuid1";
+    private static final Resume resume1 = new Resume(UUID_1);
     private static final String UUID_2 = "uuid2";
+    private static final Resume resume2 = new Resume(UUID_2);
     private static final String UUID_3 = "uuid3";
+    private static final Resume resume3 = new Resume(UUID_3);
 
     @Before
     public void setUp() throws Exception {
         storage.clear();
-        storage.save(new Resume(UUID_1));
-        storage.save(new Resume(UUID_2));
-        storage.save(new Resume(UUID_3));
+        storage.save(resume1);
+        storage.save(resume2);
+        storage.save(resume3);
     }
 
     @Test
