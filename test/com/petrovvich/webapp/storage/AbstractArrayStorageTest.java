@@ -1,16 +1,22 @@
 package com.petrovvich.webapp.storage;
 
+import com.petrovvich.webapp.exception.ExistStorageException;
 import com.petrovvich.webapp.exception.NotExistStorageException;
 import com.petrovvich.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
-public class AbstractArrayStorageTest {
+import static org.junit.Assert.assertEquals;
+
+
+public abstract class AbstractArrayStorageTest {
 
     private Storage storage = new ArrayStorage();
 
-    public AbstractArrayStorageTest(Storage storage) {
+    protected AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
     }
 
@@ -29,24 +35,24 @@ public class AbstractArrayStorageTest {
     @Test
     public void clear() throws Exception {
         storage.clear();
-        Assert.assertEquals(0, storage.size());
+        assertSize(0);
     }
 
     @Test
     public void update() throws Exception {
-        Assert.assertEquals(3, storage.size());
+        assertSize(3);
         Resume resume = new Resume(UUID_1);
         storage.update(resume);
-        Assert.assertEquals(3, storage.size());
+        assertSize(3);
         Assert.assertSame(storage.get(UUID_1), resume);
     }
 
     @Test
     public void save() throws Exception {
-        Assert.assertEquals(3, storage.size());
+        assertSize(3);
         Resume testResume = new Resume("123456");
         storage.save(testResume);
-        Assert.assertEquals(4, storage.size());
+        assertSize(4);
         Assert.assertSame(testResume, storage.get("123456"));
     }
 
@@ -61,11 +67,17 @@ public class AbstractArrayStorageTest {
         storage.get("putin");
     }
 
-    @Test
+    @Test(expected = ExistStorageException.class)
+    public void getExist() throws Exception {
+        storage.get(UUID_1);
+    }
+
+    @Test(expected = NotExistStorageException.class)
     public void delete() throws Exception {
-        Assert.assertEquals(3, storage.size());
+        assertSize(3);
         storage.delete("uuid1");
-        Assert.assertEquals(2, storage.size());
+        assertSize(2);
+        storage.get("uuid1");
     }
 
     @Test
@@ -76,7 +88,10 @@ public class AbstractArrayStorageTest {
 
     @Test
     public void size() throws Exception {
-        Assert.assertEquals(3, storage.size());
+        assertSize(3);
     }
 
+    private void assertSize(int size) {
+        assertEquals(size, storage.size());
+    }
 }
