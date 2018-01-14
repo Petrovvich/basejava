@@ -2,6 +2,7 @@ package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.exception.ExistStorageException;
 import com.petrovvich.webapp.exception.NotExistStorageException;
+import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Before;
@@ -63,13 +64,13 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void getNotExist() throws Exception {
+    public void getNotExistResume() throws Exception {
         storage.get("putin");
     }
 
     @Test(expected = ExistStorageException.class)
-    public void getExist() throws Exception {
-        storage.get(UUID_1);
+    public void saveExistResume() throws Exception {
+        storage.save(resume1);
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -78,6 +79,18 @@ public abstract class AbstractArrayStorageTest {
         storage.delete("uuid1");
         assertSize(2);
         storage.get("uuid1");
+    }
+
+    @Test(expected = StorageException.class)
+    public void storageOverloaded() {
+        try {
+            for (int i = 4; i <= AbstractArrayStorage.STORAGE_CAPACITY; i++) {
+                storage.save(new Resume());
+            }
+        } catch (StorageException e) {
+            Assert.fail();
+        }
+        storage.save(new Resume());
     }
 
     @Test
