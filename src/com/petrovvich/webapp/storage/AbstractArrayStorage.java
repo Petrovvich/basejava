@@ -10,8 +10,7 @@ import java.util.Arrays;
 /**
  * Array based storage for Resumes
  */
-public abstract class AbstractArrayStorage implements Storage {
-    protected static final int STORAGE_CAPACITY = 10000;
+public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected Resume[] storage = new Resume[STORAGE_CAPACITY];
 
@@ -77,8 +76,10 @@ public abstract class AbstractArrayStorage implements Storage {
      * @return array, contains only Resumes in storage (without null)
      */
     @Override
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, sizeOfArray);
+    public void getAll() {
+        for (int i = 0; i < sizeOfArray; i++) {
+            System.out.println(storage[i]);
+        }
     }
 
     @Override
