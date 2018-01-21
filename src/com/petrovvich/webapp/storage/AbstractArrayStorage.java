@@ -76,10 +76,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     @Override
-    public void getAll() {
-        for (int i = 0; i < sizeOfArray; i++) {
-            System.out.println(storage[i]);
-        }
+    public Resume[] getAll() {
+        return Arrays.copyOf(storage, sizeOfArray);
     }
 
     @Override

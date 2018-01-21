@@ -49,19 +49,19 @@ public class MapStorage extends AbstractStorage {
     @Override
     public void delete(String uuid) {
         Resume toDelete = new Resume(uuid);
-        if (containsInStorage(toDelete)) {
-            storage.remove(uuid);
-        } else {
+        if (!containsInStorage(toDelete)) {
             throw new NotExistStorageException(uuid);
+        } else {
+            storage.remove(uuid);
         }
     }
 
     @Override
-    public void getAll() {
+    public Resume[] getAll() {
         for (Map.Entry<String, Resume> entry : storage.entrySet()) {
             System.out.println(entry.getValue());
         }
-
+        return new Resume[10]; //заглушка пока не придумаю как адаптировать для Map этот метод
     }
 
     @Override
