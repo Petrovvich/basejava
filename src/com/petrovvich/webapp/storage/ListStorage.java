@@ -5,12 +5,13 @@ import com.petrovvich.webapp.exception.NotExistStorageException;
 import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-public class MapStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage {
 
-    protected Map<String, Resume> storage = new HashMap<>(STORAGE_CAPACITY);
+    protected List<Resume> storage = new ArrayList<>(STORAGE_CAPACITY);
+
 
     @Override
     public void clear() {
@@ -19,50 +20,49 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public void update(Resume resume) {
-        if (!containsInStorage(resume)) {
+        int index = getIndex(resume.getUuid());
+        if (index < 0) {
             throw new NotExistStorageException(resume.getUuid());
         } else {
-            storage.replace(resume.getUuid(), resume);
+            storage.set(index, resume);
         }
     }
 
     @Override
     public void save(Resume r) {
-        if (containsInStorage(r)) {
+        int index = getIndex(r.getUuid());
+        if (index >= 0) {
             throw new ExistStorageException(r.getUuid());
         } else if (storage.size() == STORAGE_CAPACITY) {
             throw new StorageException("База резюме переполнена!", r.getUuid());
         } else {
-            storage.put(r.getUuid(), r);
+            storage.add(r);
         }
     }
 
     @Override
     public Resume get(String uuid) {
-        Resume toFind = new Resume(uuid);
-        if (containsInStorage(toFind)) {
-            return storage.get(uuid);
+        int index = getIndex(uuid);
+        if (index < 0) {
+            throw new NotExistStorageException(uuid);
         }
-        throw new NotExistStorageException(uuid);
+        return storage.get(index);
     }
 
     @Override
     public void delete(String uuid) {
-        Resume toDelete = new Resume(uuid);
-        if (!containsInStorage(toDelete)) {
+        int index = getIndex(uuid);
+        if (index < 0) {
             throw new NotExistStorageException(uuid);
         } else {
-            storage.remove(uuid);
+            storage.remove(index);
         }
     }
 
     @Override
     public Resume[] getAll() {
-        for (Map.Entry<String, Resume> entry : storage.entrySet()) {
-            System.out.println(entry.getValue());
-        }
         //TODO: заглушка пока не придумаю как адаптировать для Map этот метод
-        return new Resume[10];
+        return new Resume[0];
     }
 
     @Override
@@ -70,7 +70,8 @@ public class MapStorage extends AbstractStorage {
         return storage.size();
     }
 
-    private boolean containsInStorage(Resume r) {
-        return storage.containsKey(r.getUuid());
+    protected int getIndex(String uuid) {
+        Resume resume = new Resume(uuid);
+        return storage.indexOf(resume);
     }
 }
