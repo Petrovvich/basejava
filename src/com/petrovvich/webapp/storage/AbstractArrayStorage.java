@@ -22,8 +22,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         sizeOfArray = 0;
     }
 
-    protected Integer definitionForAssert(Resume resume) {
-        return getIndex(resume.getUuid());
+    protected Boolean definitionForAssert(Resume resume) {
+        return getIndex(resume.getUuid()) < 0;
     }
 
     protected void updateElement(int index, Resume resume) {
