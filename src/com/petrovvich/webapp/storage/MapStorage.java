@@ -1,5 +1,7 @@
 package com.petrovvich.webapp.storage;
 
+import com.petrovvich.webapp.exception.ExistStorageException;
+import com.petrovvich.webapp.exception.NotExistStorageException;
 import com.petrovvich.webapp.model.Resume;
 
 import java.util.HashMap;
@@ -16,22 +18,39 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public void update(Resume resume) {
-        storage.replace(resume.getUuid(), resume);
+        if (containsInStorage(resume)) {
+            storage.replace(resume.getUuid(), resume);
+        } else {
+            throw new NotExistStorageException(resume.getUuid());
+        }
     }
 
     @Override
     public void save(Resume r) {
-        storage.put(r.getUuid(), r);
+        if (containsInStorage(r)) {
+            throw new ExistStorageException(r.getUuid());
+        } else {
+            storage.put(r.getUuid(), r);
+        }
     }
 
     @Override
     public Resume get(String uuid) {
-        return storage.get(uuid);
+        Resume toFind = new Resume(uuid);
+        if (containsInStorage(toFind)) {
+            return storage.get(uuid);
+        }
+        throw new NotExistStorageException(uuid);
     }
 
     @Override
     public void delete(String uuid) {
-        storage.remove(uuid);
+        Resume toDelete = new Resume(uuid);
+        if (containsInStorage(toDelete)) {
+            storage.remove(uuid);
+        } else {
+            throw new NotExistStorageException(uuid);
+        }
     }
 
     @Override
@@ -47,4 +66,7 @@ public class MapStorage extends AbstractStorage {
         return storage.size();
     }
 
+    private boolean containsInStorage(Resume r) {
+        return storage.containsKey(r.getUuid());
+    }
 }
