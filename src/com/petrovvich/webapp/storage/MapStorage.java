@@ -18,17 +18,19 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public void update(Resume resume) {
-        if (!containsInStorage(resume)) {
-            throw new NotExistStorageException(resume.getUuid());
-        } else {
-            storage.replace(resume.getUuid(), resume);
-        }
+    protected void updateElement(int index, Resume resume) {
+        storage.replace(resume.getUuid(), resume);
+    }
+
+    @Override
+    protected Boolean definitionForAssert(Resume resume) {
+        return storage.containsKey(resume.getUuid());
     }
 
     @Override
     public void save(Resume r) {
-        if (containsInStorage(r)) {
+        boolean containsInStorage = storage.containsKey(r.getUuid());
+        if (containsInStorage) {
             throw new ExistStorageException(r.getUuid());
         } else if (storage.size() == STORAGE_CAPACITY) {
             throw new StorageException("База резюме переполнена!", r.getUuid());
@@ -39,8 +41,8 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public Resume get(String uuid) {
-        Resume toFind = new Resume(uuid);
-        if (containsInStorage(toFind)) {
+        boolean containsInStorage = storage.containsKey(uuid);
+        if (containsInStorage) {
             return storage.get(uuid);
         }
         throw new NotExistStorageException(uuid);
@@ -48,8 +50,8 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public void delete(String uuid) {
-        Resume toDelete = new Resume(uuid);
-        if (!containsInStorage(toDelete)) {
+        boolean containsInStorage = storage.containsKey(uuid);
+        if (!containsInStorage) {
             throw new NotExistStorageException(uuid);
         } else {
             storage.remove(uuid);
@@ -68,9 +70,5 @@ public class MapStorage extends AbstractStorage {
     @Override
     public int size() {
         return storage.size();
-    }
-
-    private boolean containsInStorage(Resume r) {
-        return storage.containsKey(r.getUuid());
     }
 }

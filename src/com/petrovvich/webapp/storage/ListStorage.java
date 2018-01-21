@@ -19,13 +19,13 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        } else {
-            storage.set(index, resume);
-        }
+    protected void updateElement(int index, Resume resume) {
+        storage.set(index, resume);
+    }
+
+    @Override
+    protected Boolean definitionForAssert(Resume resume) {
+        return getIndex(resume.getUuid()) < 0;
     }
 
     @Override
