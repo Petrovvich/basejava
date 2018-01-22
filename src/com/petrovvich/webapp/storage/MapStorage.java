@@ -1,8 +1,6 @@
 package com.petrovvich.webapp.storage;
 
-import com.petrovvich.webapp.exception.ExistStorageException;
 import com.petrovvich.webapp.exception.NotExistStorageException;
-import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
 
 import java.util.HashMap;
@@ -18,20 +16,13 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public void update(Resume resume) {
-
+    protected void updateElementInStorage(Object searchIndex, Resume resume) {
+        storage.replace(resume.getUuid(), resume);
     }
 
     @Override
-    public void save(Resume r) {
-        boolean containsInStorage = storage.containsKey(r.getUuid());
-        if (containsInStorage) {
-            throw new ExistStorageException(r.getUuid());
-        } else if (storage.size() == STORAGE_CAPACITY) {
-            throw new StorageException("База резюме переполнена!", r.getUuid());
-        } else {
-            storage.put(r.getUuid(), r);
-        }
+    protected void insertElementInStorage(Object searchIndex, Resume resume) {
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.exception.ExistStorageException;
-import com.petrovvich.webapp.exception.NotExistStorageException;
 import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
 
@@ -12,6 +11,7 @@ public class ListStorage extends AbstractStorage {
 
     protected List<Resume> storage = new ArrayList<>(STORAGE_CAPACITY);
 
+    protected int sizeOfArray = storage.size();
 
     @Override
     public void clear() {
@@ -24,15 +24,15 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public void save(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(r.getUuid());
-        } else if (storage.size() == STORAGE_CAPACITY) {
-            throw new StorageException("База резюме переполнена!", r.getUuid());
-        } else {
-            storage.add(r);
-        }
+    protected void updateElementInStorage(Object searchIndex, Resume resume) {
+        storage.add(resume);
+    }
+
+
+
+    @Override
+    protected void insertElementInStorage(Object searchIndex, Resume resume) {
+        storage.add(resume);
     }
 
     @Override
