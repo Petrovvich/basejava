@@ -22,7 +22,6 @@ public class MapStorage extends AbstractStorage {
 
     }
 
-
     @Override
     public void save(Resume r) {
         boolean containsInStorage = storage.containsKey(r.getUuid());
@@ -33,15 +32,6 @@ public class MapStorage extends AbstractStorage {
         } else {
             storage.put(r.getUuid(), r);
         }
-    }
-
-    @Override
-    public Resume get(String uuid) {
-        boolean containsInStorage = storage.containsKey(uuid);
-        if (containsInStorage) {
-            return storage.get(uuid);
-        }
-        throw new NotExistStorageException(uuid);
     }
 
     @Override
