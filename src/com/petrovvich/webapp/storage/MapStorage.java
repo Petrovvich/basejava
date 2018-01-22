@@ -18,14 +18,10 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void updateElement(int index, Resume resume) {
-        storage.replace(resume.getUuid(), resume);
+    public void update(Resume resume) {
+
     }
 
-    @Override
-    protected Boolean definitionForAssert(Resume resume) {
-        return storage.containsKey(resume.getUuid());
-    }
 
     @Override
     public void save(Resume r) {

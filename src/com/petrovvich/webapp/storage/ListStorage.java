@@ -19,13 +19,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void updateElement(int index, Resume resume) {
-        storage.set(index, resume);
-    }
+    public void update(Resume resume) {
 
-    @Override
-    protected Boolean definitionForAssert(Resume resume) {
-        return getIndex(resume.getUuid()) < 0;
     }
 
     @Override

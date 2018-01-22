@@ -22,15 +22,15 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         sizeOfArray = 0;
     }
 
-    protected Boolean definitionForAssert(Resume resume) {
-        return getIndex(resume.getUuid()) < 0;
+    public void update(Resume resume) {
+        int index = getIndex(resume.getUuid());
+        if (index < 0) {
+            throw new NotExistStorageException(resume.getUuid());
+        }
+        insertElement(resume, index);
     }
 
-    protected void updateElement(int index, Resume resume) {
-        storage[index] = resume;
-    }
-
-    @Override
+        @Override
     public void save(Resume r) {
         int index = getIndex(r.getUuid());
         if (index >= 0) {
