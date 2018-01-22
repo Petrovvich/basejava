@@ -45,21 +45,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected abstract void insertElement(Resume r, int index);
 
-    @Override
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            deleteElement(index);
-            storage[sizeOfArray - 1] = null;
-            sizeOfArray--;
-        }
-    }
-
     protected abstract void deleteElement(int index);
 
-    protected abstract int getIndex(String uuid); //Удалить - вынесено в getSearchIndex
+    protected void deleteResumeFromStorage(Object searchIndex) {
+        deleteElement((Integer) searchIndex);
+        storage[sizeOfArray - 1] = null;
+        sizeOfArray--;
+    }
 
     /**
      * @return array, contains only Resumes in storage (without null)

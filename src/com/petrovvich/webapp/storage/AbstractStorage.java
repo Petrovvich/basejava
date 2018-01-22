@@ -19,13 +19,21 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract Resume getResumeFromStorage(Object searchIndex);
 
-    protected boolean checkIndex(Object searchIndex) {
-        if ((Integer) searchIndex < 0) {
-            return false;
-        }
-        return true;
-    }
+    protected abstract boolean checkIndex(Object searchIndex);
 
     protected abstract Object getSearchIndex(String uuid);
+
+    @Override
+    public void delete(String uuid) {
+        Object searchIndex = getSearchIndex(uuid);
+        boolean validateIndex = checkIndex(searchIndex);
+        if (!validateIndex) {
+            throw new NotExistStorageException(uuid);
+        } else {
+            deleteResumeFromStorage(searchIndex);
+        }
+    }
+
+    protected abstract void deleteResumeFromStorage(Object searchIndex);
 
 }

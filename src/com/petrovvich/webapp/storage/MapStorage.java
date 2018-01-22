@@ -53,13 +53,8 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public void delete(String uuid) {
-        boolean containsInStorage = storage.containsKey(uuid);
-        if (!containsInStorage) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            storage.remove(uuid);
-        }
+    protected void deleteResumeFromStorage(Object searchIndex) {
+        storage.remove(searchIndex);
     }
 
     @Override
