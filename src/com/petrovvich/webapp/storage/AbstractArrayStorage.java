@@ -46,15 +46,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected abstract void insertElement(Resume r, int index);
 
     @Override
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        return storage[index];
-    }
-
-    @Override
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
@@ -68,7 +59,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected abstract void deleteElement(int index);
 
-    protected abstract int getIndex(String uuid);
+    protected abstract int getIndex(String uuid); //Удалить - вынесено в getSearchIndex
 
     /**
      * @return array, contains only Resumes in storage (without null)
@@ -81,5 +72,16 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     public int size() {
         return sizeOfArray;
+    }
+
+    protected Resume getResumeFromStorage(Object searchIndex) {
+        return storage[(Integer) searchIndex];
+    }
+
+    protected boolean checkIndex(Object searchIndex) {
+        if ((Integer) searchIndex < 0) {
+            return false;
+        }
+        return true;
     }
 }

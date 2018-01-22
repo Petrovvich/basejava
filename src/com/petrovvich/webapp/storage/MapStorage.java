@@ -45,6 +45,24 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
+    protected Resume getResumeFromStorage(Object searchIndex) {
+        return storage.get(searchIndex);
+    }
+
+    @Override
+    protected boolean checkIndex(Object searchIndex) {
+        return storage.containsKey(searchIndex);
+    }
+
+    @Override
+    protected Object getSearchIndex(String uuid) {
+        if (storage.get(uuid) == null) {
+            return -1;
+        }
+        return storage.get(uuid);
+    }
+
+    @Override
     public void delete(String uuid) {
         boolean containsInStorage = storage.containsKey(uuid);
         if (!containsInStorage) {

@@ -45,6 +45,19 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
+    protected Resume getResumeFromStorage(Object searchIndex) {
+        return storage.get((Integer) searchIndex);
+    }
+
+    @Override
+    protected boolean checkIndex(Object searchIndex) {
+        if ((Integer) searchIndex < 0) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
@@ -65,7 +78,8 @@ public class ListStorage extends AbstractStorage {
         return storage.size();
     }
 
-    protected int getIndex(String uuid) {
+    @Override
+    protected Integer getSearchIndex(String uuid) {
         Resume resume = new Resume(uuid);
         return storage.indexOf(resume);
     }
