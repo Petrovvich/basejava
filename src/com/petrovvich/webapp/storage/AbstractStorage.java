@@ -13,7 +13,7 @@ public abstract class AbstractStorage implements Storage {
     public Resume get(String uuid) {
         Object searchIndex = getSearchIndex(uuid);
         boolean validateIndex = checkIndex(searchIndex);
-        if (!validateIndex) {
+        if (validateIndex) {
             throw new NotExistStorageException(uuid);
         }
         return getResumeFromStorage(searchIndex); //storage[index];
@@ -42,7 +42,7 @@ public abstract class AbstractStorage implements Storage {
     public void save(Resume r) {
         Object searchIndex = getSearchIndex(r.getUuid());
         boolean validateIndex = checkIndex(searchIndex);
-        if (validateIndex) {
+        if (!validateIndex) {
             throw new ExistStorageException(r.getUuid());
         } else if (size() == STORAGE_CAPACITY) {
             throw new StorageException("База резюме переполнена!", r.getUuid());
