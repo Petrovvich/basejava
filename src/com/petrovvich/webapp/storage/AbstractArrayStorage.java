@@ -1,5 +1,6 @@
 package com.petrovvich.webapp.storage;
 
+import com.petrovvich.webapp.exception.NotExistStorageException;
 import com.petrovvich.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -40,7 +41,14 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     protected void updateElementInStorage(Object searchIndex, Resume resume) {
-        insertElement(resume, (Integer) searchIndex);
+    }
+
+    public void update(Resume resume) {
+        Integer index = (Integer) getSearchIndex(resume.getUuid());
+        if (index < 0) {
+            throw new NotExistStorageException(resume.getUuid());
+        }
+        insertElement(resume, index);
     }
 
     protected abstract void insertElement(Resume r, int index);
