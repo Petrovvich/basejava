@@ -10,21 +10,6 @@ public class MapStorage extends AbstractStorage {
     protected Map<String, Resume> storage = new HashMap<>(STORAGE_CAPACITY);
 
     @Override
-    public void clear() {
-        storage.clear();
-    }
-
-    @Override
-    protected void updateElementInStorage(Object searchIndex, Resume resume) {
-        storage.replace(resume.getUuid(), resume);
-    }
-
-    @Override
-    protected void insertElementInStorage(Object searchIndex, Resume resume) {
-        storage.put(resume.getUuid(), resume);
-    }
-
-    @Override
     protected Resume getResumeFromStorage(Object searchIndex) {
         return storage.get(searchIndex);
     }
@@ -39,7 +24,7 @@ public class MapStorage extends AbstractStorage {
         if (storage.get(uuid) == null) {
             return -1;
         }
-        return storage.get(uuid);
+        return storage.get(uuid).getUuid();
     }
 
     @Override
@@ -48,16 +33,28 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        for (Map.Entry<String, Resume> entry : storage.entrySet()) {
-            System.out.println(entry.getValue());
-        }
-        //TODO: заглушка пока не придумаю как адаптировать для Map этот метод
-        return new Resume[10];
+    protected void insertElementInStorage(Object searchIndex, Resume resume) {
+        storage.put(resume.getUuid(), resume);
+    }
+
+    @Override
+    protected void updateElementInStorage(Object searchIndex, Resume resume) {
+        storage.replace(resume.getUuid(), resume);
     }
 
     @Override
     public int size() {
         return storage.size();
+    }
+
+    @Override
+    public void clear() {
+        storage.clear();
+    }
+
+    @Override
+    public Resume[] getAll() {
+        Resume[] result = (Resume[]) storage.values().toArray();
+        return result;
     }
 }
