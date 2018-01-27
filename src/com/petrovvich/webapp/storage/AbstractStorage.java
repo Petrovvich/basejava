@@ -53,8 +53,6 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void insertElementInStorage(Object searchIndex, Resume resume);
 
-    public abstract int size();
-
     public void update(Resume resume) {
         Object searchIndex = getSearchIndex(resume.getUuid());
         boolean validateIndex = checkIndex(searchIndex);
@@ -66,5 +64,5 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void updateElementInStorage(Object searchIndex, Resume resume);
 
-
+    public abstract int size();
 }
