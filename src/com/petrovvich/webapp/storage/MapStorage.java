@@ -1,5 +1,6 @@
 package com.petrovvich.webapp.storage;
 
+import com.petrovvich.webapp.exception.NotExistStorageException;
 import com.petrovvich.webapp.model.Resume;
 
 import java.util.HashMap;
@@ -38,8 +39,13 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void updateElementInStorage(Object searchIndex, Resume resume) {
-        storage.replace(resume.getUuid(), resume);
+    public void update(Resume resume) {
+        String index = (String) getSearchIndex(resume.getUuid());
+        if (!checkIndex(index)) {
+            throw new NotExistStorageException(resume.getUuid());
+        } else {
+            storage.replace(index, storage.get(index), resume);
+        }
     }
 
     @Override

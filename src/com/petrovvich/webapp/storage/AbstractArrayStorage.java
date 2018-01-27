@@ -39,19 +39,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         sizeOfArray++;
     }
 
-    @Override
-    protected void updateElementInStorage(Object searchIndex, Resume resume) {
-    }
+    protected abstract void insertElement(Resume r, int index);
 
+    @Override
     public void update(Resume resume) {
-        Integer index = (Integer) getSearchIndex(resume.getUuid());
+        int index = (int) getSearchIndex(resume.getUuid());
         if (index < 0) {
             throw new NotExistStorageException(resume.getUuid());
+        } else {
+            storage[index] = resume;
         }
-        insertElement(resume, index);
     }
-
-    protected abstract void insertElement(Resume r, int index);
 
     @Override
     public int size() {

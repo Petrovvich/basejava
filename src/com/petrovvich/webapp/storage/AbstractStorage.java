@@ -53,16 +53,5 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void insertElementInStorage(Object searchIndex, Resume resume);
 
-    public void update(Resume resume) {
-        Object searchIndex = getSearchIndex(resume.getUuid());
-        boolean validateIndex = checkIndex(searchIndex);
-        if (!validateIndex) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-        updateElementInStorage(searchIndex, resume);
-    }
-
-    protected abstract void updateElementInStorage(Object searchIndex, Resume resume);
-
     public abstract int size();
 }
