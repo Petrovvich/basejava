@@ -1,6 +1,5 @@
 package com.petrovvich.webapp.storage;
 
-import com.petrovvich.webapp.exception.NotExistStorageException;
 import com.petrovvich.webapp.model.Resume;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void deleteResumeFromStorage(Object searchIndex) {
-        storage.remove((Integer) searchIndex);
+        storage.remove(searchIndex);
     }
 
     @Override
@@ -41,13 +40,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public void update(Resume resume) {
-        int index = getSearchIndex(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        } else {
-            storage.set(index, resume);
-        }
+    protected void updateElementInStorage(Object searchIndex, Resume resume) {
+        storage.set((Integer) searchIndex, resume);
     }
 
     @Override
@@ -62,7 +56,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        Resume[] result = (Resume[]) storage.toArray();
+        Resume[] result = storage.toArray(new Resume[storage.size()]);
         return result;
     }
 }

@@ -16,7 +16,7 @@ public abstract class AbstractStorage implements Storage {
         if (validateIndex) {
             throw new NotExistStorageException(uuid);
         }
-        return getResumeFromStorage(searchIndex); //storage[index];
+        return getResumeFromStorage(searchIndex);
     }
 
     protected abstract Resume getResumeFromStorage(Object searchIndex);
@@ -29,7 +29,7 @@ public abstract class AbstractStorage implements Storage {
     public void delete(String uuid) {
         Object searchIndex = getSearchIndex(uuid);
         boolean validateIndex = checkIndex(searchIndex);
-        if (!validateIndex) {
+        if (validateIndex) {
             throw new NotExistStorageException(uuid);
         } else {
             deleteResumeFromStorage(searchIndex);
@@ -52,6 +52,17 @@ public abstract class AbstractStorage implements Storage {
     }
 
     protected abstract void insertElementInStorage(Object searchIndex, Resume resume);
+
+    public void update(Resume resume) {
+        Object searchIndex = getSearchIndex(resume.getUuid());
+        boolean validateIndex = checkIndex(searchIndex);
+        if (validateIndex) {
+            throw new ExistStorageException(resume.getUuid());
+        }
+        updateElementInStorage(searchIndex, resume);
+    }
+
+    protected abstract void updateElementInStorage(Object searchIndex, Resume resume);
 
     public abstract int size();
 }

@@ -1,6 +1,5 @@
 package com.petrovvich.webapp.storage;
 
-import com.petrovvich.webapp.exception.NotExistStorageException;
 import com.petrovvich.webapp.model.Resume;
 
 import java.util.HashMap;
@@ -17,15 +16,12 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected boolean checkIndex(Object searchIndex) {
-        return storage.containsKey(searchIndex);
+        return !storage.containsKey(searchIndex);
     }
 
     @Override
     protected Object getSearchIndex(String uuid) {
-        if (storage.get(uuid) == null) {
-            return -1;
-        }
-        return storage.get(uuid).getUuid();
+        return uuid;
     }
 
     @Override
@@ -39,13 +35,8 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public void update(Resume resume) {
-        String index = (String) getSearchIndex(resume.getUuid());
-        if (!checkIndex(index)) {
-            throw new NotExistStorageException(resume.getUuid());
-        } else {
-            storage.replace(index, storage.get(index), resume);
-        }
+    protected void updateElementInStorage(Object searchIndex, Resume resume) {
+        storage.replace((String) searchIndex, storage.get(searchIndex), resume);
     }
 
     @Override
@@ -62,5 +53,15 @@ public class MapStorage extends AbstractStorage {
     public Resume[] getAll() {
         Resume[] result = (Resume[]) storage.values().toArray();
         return result;
+    }
+
+    public static void main(String[] args) {
+        MapStorage mapStorage = new MapStorage();
+        Resume r = new Resume("45");
+        mapStorage.save(r);
+        mapStorage.update(r);
+        System.out.println(mapStorage.size());
+        System.out.println(mapStorage.get("45"));
+
     }
 }
