@@ -1,7 +1,6 @@
 package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.model.Resume;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,17 +50,6 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        Resume[] result = (Resume[]) storage.values().toArray();
-        return result;
-    }
-
-    public static void main(String[] args) {
-        MapStorage mapStorage = new MapStorage();
-        Resume r = new Resume("45");
-        mapStorage.save(r);
-        mapStorage.update(r);
-        System.out.println(mapStorage.size());
-        System.out.println(mapStorage.get("45"));
-
+        return storage.values().toArray(new Resume[storage.size()]);
     }
 }
