@@ -11,13 +11,14 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 
-public abstract class AbstractArrayStorageTest {
+public abstract class AbstractStorageTest {
 
     private Storage storage = new ArrayStorage();
 
-    protected AbstractArrayStorageTest(Storage storage) {
+    protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
+
     private static final String UUID_1 = "uuid1";
     private static final Resume resume1 = new Resume(UUID_1);
     private static final String UUID_2 = "uuid2";
