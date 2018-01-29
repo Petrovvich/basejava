@@ -2,7 +2,9 @@ package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.model.Resume;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Array based storage for Resumes
@@ -57,7 +59,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, sizeOfArray);
+    public List<Resume> getAllSorted() {
+        return Arrays.asList(Arrays.copyOf(storage, sizeOfArray));
     }
 }

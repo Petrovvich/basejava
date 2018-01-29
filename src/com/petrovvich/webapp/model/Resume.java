@@ -6,6 +6,7 @@ public class Resume {
 
     // Unique identifier
     private final String uuid;
+    private String fullname;
 
     public Resume(String uuid) {
         this.uuid = uuid;
@@ -37,5 +38,13 @@ public class Resume {
     @Override
     public int hashCode() {
         return uuid.hashCode();
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 }

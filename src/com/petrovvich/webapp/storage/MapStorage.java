@@ -2,9 +2,8 @@ package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.model.Resume;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MapStorage extends AbstractStorage {
 
@@ -51,9 +50,9 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        Resume[] resumes = storage.values().toArray(new Resume[storage.size()]);
-        Arrays.sort(resumes);
+    public List<Resume> getAllSorted() {
+        List<Resume> resumes = new ArrayList<>(storage.values());
+        resumes.sort(Comparator.comparing(Resume::getUuid));
         return resumes;
     }
 }
