@@ -2,7 +2,6 @@ package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.model.Resume;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,6 +59,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return Arrays.asList(Arrays.copyOf(storage, sizeOfArray));
+        List<Resume> resumes = Arrays.asList(Arrays.copyOf(storage, sizeOfArray));
+        resumes.sort(RESUME_COMPARATOR);
+        return resumes;
     }
 }

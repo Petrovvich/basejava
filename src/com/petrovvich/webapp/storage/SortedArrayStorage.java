@@ -2,11 +2,8 @@ package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.model.Resume;
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
-
-    private static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(Resume::getUuid);
 
     protected void insertElement(Resume r, int index) {
         int indexToInsert = - index - 1;

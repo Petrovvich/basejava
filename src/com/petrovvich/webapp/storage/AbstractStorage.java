@@ -5,9 +5,13 @@ import com.petrovvich.webapp.exception.NotExistStorageException;
 import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
 
+import java.util.Comparator;
+
 public abstract class AbstractStorage implements Storage {
 
     protected static final int STORAGE_CAPACITY = 10000;
+
+    protected static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(Resume::getFullname);
 
     @Override
     public Resume get(String uuid) {

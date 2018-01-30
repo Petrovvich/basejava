@@ -3,7 +3,6 @@ package com.petrovvich.webapp.storage;
 import com.petrovvich.webapp.model.Resume;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class MapStorage extends AbstractStorage {
 
@@ -52,7 +51,7 @@ public class MapStorage extends AbstractStorage {
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> resumes = new ArrayList<>(storage.values());
-        resumes.sort(Comparator.comparing(Resume::getUuid));
+        resumes.sort(RESUME_COMPARATOR);
         return resumes;
     }
 }

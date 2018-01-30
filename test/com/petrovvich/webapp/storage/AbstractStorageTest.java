@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -16,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
 
-    private Storage storage = new ArrayStorage();
+    private Storage storage;
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -33,8 +34,11 @@ public abstract class AbstractStorageTest {
     public void setUp() throws Exception {
         storage.clear();
         storage.save(resume1);
+        resume1.setFullname("Robert De Niro");
         storage.save(resume2);
+        resume2.setFullname("Al Pachino");
         storage.save(resume3);
+        resume3.setFullname("Mark Dacascos");
     }
 
     @Test
@@ -99,9 +103,16 @@ public abstract class AbstractStorageTest {
     @Test
     public void getAll() throws Exception {
         List<Resume> result = new ArrayList<>();
-        result.add(new Resume(UUID_1));
-        result.add(new Resume(UUID_2));
-        result.add(new Resume(UUID_3));
+        Resume resume1 = new Resume(UUID_1);
+        resume1.setFullname("Robert De Niro");
+        result.add(resume1);
+        Resume resume2 = new Resume(UUID_2);
+        resume2.setFullname("Al Pachino");
+        result.add(resume2);
+        Resume resume3 = new Resume(UUID_3);
+        resume3.setFullname("Mark Dacascos");
+        result.add(resume3);
+        result.sort(Comparator.comparing(Resume::getFullname));
         Assert.assertEquals(result, storage.getAllSorted());
     }
 
