@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
 
-    private Storage storage;
+    protected Storage storage;
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -86,18 +86,6 @@ public abstract class AbstractStorageTest {
         storage.delete("uuid1");
         assertSize(2);
         storage.get("uuid1");
-    }
-
-    @Test(expected = StorageException.class)
-    public void storageOverloaded() {
-        try {
-            for (int i = 4; i <= AbstractArrayStorage.STORAGE_CAPACITY; i++) {
-                storage.save(new Resume());
-            }
-        } catch (StorageException e) {
-            Assert.fail();
-        }
-        storage.save(new Resume());
     }
 
     @Test

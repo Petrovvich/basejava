@@ -32,7 +32,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected void insertElementInStorage(Object searchIndex, Resume resume) {
-        storage.put((String) searchIndex, resume);
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
