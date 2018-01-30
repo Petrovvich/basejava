@@ -20,7 +20,9 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected Object getSearchIndex(String uuid) {
-        return uuid;
+        Resume resume = new Resume();
+        resume.setFullname(uuid);
+        return resume.getFullname();
     }
 
     @Override
@@ -30,7 +32,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected void insertElementInStorage(Object searchIndex, Resume resume) {
-        storage.put(resume.getUuid(), resume);
+        storage.put((String) searchIndex, resume);
     }
 
     @Override
