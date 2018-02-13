@@ -49,6 +49,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
+    protected List<Resume> getListedResumes() {
+        return Arrays.asList(Arrays.copyOf(storage, sizeOfArray));
+    }
+
+    @Override
     public int size() {
         return sizeOfArray;
     }
@@ -57,12 +62,5 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     public void clear() {
         Arrays.fill(storage, 0, sizeOfArray, null);
         sizeOfArray = 0;
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> resumes = Arrays.asList(Arrays.copyOf(storage, sizeOfArray));
-        resumes.sort(RESUME_COMPARATOR);
-        return resumes;
     }
 }

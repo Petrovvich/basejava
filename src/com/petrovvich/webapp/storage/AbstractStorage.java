@@ -6,10 +6,11 @@ import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
 
 import java.util.Comparator;
+import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
 
-    protected static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(Resume::getUuid);
+    protected static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(Resume::getUuid).thenComparing(Resume::getFullname);
 
     @Override
     public Resume get(String uuid) {
@@ -65,6 +66,14 @@ public abstract class AbstractStorage implements Storage {
     }
 
     protected abstract void updateElementInStorage(Object searchIndex, Resume resume);
+
+    public List<Resume> getAllSorted() {
+        List<Resume> result = getListedResumes();
+        result.sort(RESUME_COMPARATOR);
+        return result;
+    }
+
+    protected abstract List<Resume> getListedResumes();
 
     public abstract int size();
 }

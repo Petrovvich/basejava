@@ -41,6 +41,11 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
+    protected List<Resume> getListedResumes() {
+        return new ArrayList<>(storage.values());
+    }
+
+    @Override
     public int size() {
         return storage.size();
     }
@@ -48,12 +53,5 @@ public class MapStorage extends AbstractStorage {
     @Override
     public void clear() {
         storage.clear();
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> resumes = new ArrayList<>(storage.values());
-        resumes.sort(RESUME_COMPARATOR);
-        return resumes;
     }
 }
