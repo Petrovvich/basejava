@@ -6,7 +6,7 @@ import java.util.*;
 
 public class MapStorage extends AbstractStorage {
 
-    protected Map<String, Resume> storage = new HashMap<>(STORAGE_CAPACITY);
+    protected Map<String, Resume> storage = new HashMap<>();
 
     @Override
     protected Resume getResumeFromStorage(Object searchIndex) {

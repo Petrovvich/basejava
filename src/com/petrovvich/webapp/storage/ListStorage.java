@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ListStorage extends AbstractStorage {
 
-    protected List<Resume> storage = new ArrayList<>(STORAGE_CAPACITY);
+    protected List<Resume> storage = new ArrayList<>();
 
     @Override
     protected Resume getResumeFromStorage(Object searchIndex) {

@@ -9,9 +9,7 @@ import java.util.Comparator;
 
 public abstract class AbstractStorage implements Storage {
 
-    protected static final int STORAGE_CAPACITY = 10000;
-
-    protected static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(Resume::getFullname);
+    protected static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(Resume::getUuid);
 
     @Override
     public Resume get(String uuid) {
@@ -48,7 +46,7 @@ public abstract class AbstractStorage implements Storage {
         boolean validateIndex = checkIndex(searchIndex);
         if (!validateIndex) {
             throw new ExistStorageException(r.getUuid());
-        } else if (size() == STORAGE_CAPACITY) {
+        } else if (size() == 10000) {
             throw new StorageException("База резюме переполнена!", r.getUuid());
         } else {
             insertElementInStorage(searchIndex, r);

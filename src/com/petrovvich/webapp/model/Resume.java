@@ -32,7 +32,7 @@ public class Resume {
 
         Resume resume = (Resume) o;
 
-        return fullname.equals(resume.fullname);
+        return uuid.equals(resume.uuid);
     }
 
     @Override

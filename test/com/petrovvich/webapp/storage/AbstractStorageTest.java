@@ -100,7 +100,7 @@ public abstract class AbstractStorageTest {
         Resume resume3 = new Resume(UUID_3);
         resume3.setFullname("Mark Dacascos");
         result.add(resume3);
-        result.sort(Comparator.comparing(Resume::getFullname));
+        result.sort(Comparator.comparing(Resume::getUuid));
         Assert.assertEquals(result, storage.getAllSorted());
     }
 
