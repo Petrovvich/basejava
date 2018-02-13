@@ -20,9 +20,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected Object getSearchIndex(String uuid) {
-        Resume resume = new Resume();
-        resume.setFullname(uuid);
-        return resume.getFullname();
+        return uuid;
     }
 
     @Override

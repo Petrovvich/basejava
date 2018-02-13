@@ -2,6 +2,7 @@ package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.model.Resume;
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
@@ -20,6 +21,6 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
     protected Integer getSearchIndex(String uuid) {
         Resume resume = new Resume(uuid);
-        return Arrays.binarySearch(storage, 0, sizeOfArray, resume, RESUME_COMPARATOR);
+        return Arrays.binarySearch(storage, 0, sizeOfArray, resume, Comparator.comparing(Resume::getUuid));
     }
 }
