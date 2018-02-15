@@ -47,8 +47,6 @@ public abstract class AbstractStorage implements Storage {
         boolean validateIndex = checkIndex(searchIndex);
         if (!validateIndex) {
             throw new ExistStorageException(r.getUuid());
-        } else if (size() == 10000) {
-            throw new StorageException("База резюме переполнена!", r.getUuid());
         } else {
             insertElementInStorage(searchIndex, r);
         }

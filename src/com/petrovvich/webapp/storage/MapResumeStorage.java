@@ -1,52 +1,46 @@
 package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.model.Resume;
-import java.util.ArrayList;
-import java.util.List;
 
-public class ListStorage extends AbstractStorage {
+import java.util.*;
 
-    protected List<Resume> storage = new ArrayList<>();
+public class MapResumeStorage extends AbstractStorage {
+
+    protected Map<String, Resume> storage = new HashMap<>();
 
     @Override
     protected Resume getResumeFromStorage(Object searchIndex) {
-        return storage.get((Integer) searchIndex);
+        return storage.get(((Resume) searchIndex).getUuid());
     }
 
     @Override
     protected boolean checkIndex(Object searchIndex) {
-        return (Integer) searchIndex < 0;
+        return searchIndex == null;
     }
 
     @Override
-    protected Integer getSearchIndex(String uuid) {
-        int result = -1;
-        for (int i = 0; i < storage.size(); i++) {
-            if(storage.get(i).getUuid().equals(uuid)) {
-                result = i;
-            }
-        }
-        return result;
+    protected Object getSearchIndex(String uuid) {
+        return storage.get(uuid);
     }
 
     @Override
     protected void deleteResumeFromStorage(Object searchIndex) {
-        storage.remove(((Integer) searchIndex).intValue());
+        storage.remove(((Resume) searchIndex).getUuid());
     }
 
     @Override
     protected void insertElementInStorage(Object searchIndex, Resume resume) {
-        storage.add(resume);
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
     protected void updateElementInStorage(Object searchIndex, Resume resume) {
-        storage.set((Integer) searchIndex, resume);
+        storage.replace(((Resume) searchIndex).getUuid(), storage.get(((Resume) searchIndex).getUuid()), resume);
     }
 
     @Override
     protected List<Resume> getListedResumes() {
-        return new ArrayList<>(storage);
+        return new ArrayList<>(storage.values());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.petrovvich.webapp.model;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Resume {
@@ -22,26 +23,29 @@ public class Resume {
 
     @Override
     public String toString() {
-        return uuid;
+        return "Resume{" +
+                "uuid='" + uuid + '\'' +
+                ", fullname='" + fullname + '\'' +
+                '}';
+    }
+
+    public String getFullname() {
+        return fullname;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Resume resume = (Resume) o;
-
-        return uuid.equals(resume.uuid);
+        return Objects.equals(uuid, resume.uuid) &&
+                Objects.equals(fullname, resume.fullname);
     }
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
-    }
 
-    public String getFullname() {
-        return fullname;
+        return Objects.hash(uuid, fullname);
     }
 
     public void setFullname(String fullname) {
