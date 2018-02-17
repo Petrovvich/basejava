@@ -67,7 +67,7 @@ public abstract class AbstractStorage<SK> implements Storage {
         SK searchIndex = getSearchIndex(resume.getUuid());
         boolean validateIndex = checkIndex(searchIndex);
         if (validateIndex) {
-            LOGGER.warning("Can't update resume " + resume + ". Resume is not in Storage!");
+            LOGGER.warning("Can't update resume " + resume + ". Resume is not in this Storage!");
             throw new ExistStorageException(resume.getUuid());
         }
         updateElementInStorage(searchIndex, resume);
