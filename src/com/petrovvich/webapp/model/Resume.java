@@ -10,9 +10,7 @@ public class Resume {
     // Unique identifier
     private final String uuid;
     private String fullname;
-
     private final Map<Contacts, String> contacts = new EnumMap<>(Contacts.class);
-
     private Personal personal;
     private Objective objective;
     private Achievement achievements;
