@@ -1,5 +1,7 @@
 package com.petrovvich.webapp.model;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -8,6 +10,15 @@ public class Resume {
     // Unique identifier
     private final String uuid;
     private String fullname;
+
+    private final Map<Contacts, String> contacts = new EnumMap<>(Contacts.class);
+
+    private Personal personal;
+    private Objective objective;
+    private Achievement achievements;
+    private Qualification qualifications;
+    private Experience experience;
+    private Education education;
 
     public Resume(String uuid) {
         this.uuid = uuid;
@@ -19,6 +30,10 @@ public class Resume {
 
     public String getUuid() {
         return uuid;
+    }
+
+    public String getContact(Contacts contactType) {
+        return contacts.get(contactType);
     }
 
     @Override
