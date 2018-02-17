@@ -8,13 +8,13 @@ import com.petrovvich.webapp.model.Resume;
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<SK> implements Storage {
 
     protected static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(Resume::getUuid).thenComparing(Resume::getFullname);
 
     @Override
     public Resume get(String uuid) {
-        Object searchIndex = getSearchIndex(uuid);
+        SK searchIndex = getSearchIndex(uuid);
         boolean validateIndex = checkIndex(searchIndex);
         if (validateIndex) {
             throw new NotExistStorageException(uuid);
@@ -22,15 +22,15 @@ public abstract class AbstractStorage implements Storage {
         return getResumeFromStorage(searchIndex);
     }
 
-    protected abstract Resume getResumeFromStorage(Object searchIndex);
+    protected abstract Resume getResumeFromStorage(SK searchIndex);
 
-    protected abstract boolean checkIndex(Object searchIndex);
+    protected abstract boolean checkIndex(SK searchIndex);
 
-    protected abstract Object getSearchIndex(String uuid);
+    protected abstract SK getSearchIndex(String uuid);
 
     @Override
     public void delete(String uuid) {
-        Object searchIndex = getSearchIndex(uuid);
+        SK searchIndex = getSearchIndex(uuid);
         boolean validateIndex = checkIndex(searchIndex);
         if (validateIndex) {
             throw new NotExistStorageException(uuid);
@@ -39,11 +39,11 @@ public abstract class AbstractStorage implements Storage {
         }
     }
 
-    protected abstract void deleteResumeFromStorage(Object searchIndex);
+    protected abstract void deleteResumeFromStorage(SK searchIndex);
 
     @Override
     public void save(Resume r) {
-        Object searchIndex = getSearchIndex(r.getUuid());
+        SK searchIndex = getSearchIndex(r.getUuid());
         boolean validateIndex = checkIndex(searchIndex);
         if (!validateIndex) {
             throw new ExistStorageException(r.getUuid());
@@ -52,10 +52,10 @@ public abstract class AbstractStorage implements Storage {
         }
     }
 
-    protected abstract void insertElementInStorage(Object searchIndex, Resume resume);
+    protected abstract void insertElementInStorage(SK searchIndex, Resume resume);
 
     public void update(Resume resume) {
-        Object searchIndex = getSearchIndex(resume.getUuid());
+        SK searchIndex = getSearchIndex(resume.getUuid());
         boolean validateIndex = checkIndex(searchIndex);
         if (validateIndex) {
             throw new ExistStorageException(resume.getUuid());
@@ -63,7 +63,7 @@ public abstract class AbstractStorage implements Storage {
         updateElementInStorage(searchIndex, resume);
     }
 
-    protected abstract void updateElementInStorage(Object searchIndex, Resume resume);
+    protected abstract void updateElementInStorage(SK searchIndex, Resume resume);
 
     public List<Resume> getAllSorted() {
         List<Resume> result = getListedResumes();

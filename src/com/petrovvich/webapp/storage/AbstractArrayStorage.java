@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Array based storage for Resumes
  */
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
     protected static final int STORAGE_CAPACITY = 10000;
 
@@ -18,18 +18,18 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected int sizeOfArray = 0;
 
     @Override
-    protected Resume getResumeFromStorage(Object searchIndex) {
-        return storage[(Integer) searchIndex];
+    protected Resume getResumeFromStorage(Integer searchIndex) {
+        return storage[searchIndex];
     }
 
     @Override
-    protected boolean checkIndex(Object searchIndex) {
-        return (Integer) searchIndex < 0;
+    protected boolean checkIndex(Integer searchIndex) {
+        return  searchIndex < 0;
     }
 
     @Override
-    protected void deleteResumeFromStorage(Object searchIndex) {
-        deleteElement((Integer) searchIndex);
+    protected void deleteResumeFromStorage(Integer searchIndex) {
+        deleteElement( searchIndex);
         storage[sizeOfArray - 1] = null;
         sizeOfArray--;
     }
@@ -37,11 +37,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected abstract void deleteElement(int index);
 
     @Override
-    protected void insertElementInStorage(Object searchIndex, Resume resume) {
+    protected void insertElementInStorage(Integer searchIndex, Resume resume) {
         if (size() == STORAGE_CAPACITY) {
             throw new StorageException("База резюме переполнена!", resume.getUuid());
         } else {
-            insertElement(resume, (Integer) searchIndex);
+            insertElement(resume, searchIndex);
             sizeOfArray++;
         }
     }
@@ -49,8 +49,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected abstract void insertElement(Resume r, int index);
 
     @Override
-    protected void updateElementInStorage(Object searchIndex, Resume resume) {
-        storage[(Integer) searchIndex] = resume;
+    protected void updateElementInStorage(Integer searchIndex, Resume resume) {
+        storage[searchIndex] = resume;
     }
 
     @Override

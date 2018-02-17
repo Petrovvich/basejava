@@ -4,38 +4,38 @@ import com.petrovvich.webapp.model.Resume;
 
 import java.util.*;
 
-public class MapStorage extends AbstractStorage {
+public class MapUuidStorage extends AbstractStorage<String> {
 
     protected Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    protected Resume getResumeFromStorage(Object searchIndex) {
+    protected Resume getResumeFromStorage(String searchIndex) {
         return storage.get(searchIndex);
     }
 
     @Override
-    protected boolean checkIndex(Object searchIndex) {
+    protected boolean checkIndex(String searchIndex) {
         return !storage.containsKey(searchIndex);
     }
 
     @Override
-    protected Object getSearchIndex(String uuid) {
+    protected String getSearchIndex(String uuid) {
         return uuid;
     }
 
     @Override
-    protected void deleteResumeFromStorage(Object searchIndex) {
+    protected void deleteResumeFromStorage(String searchIndex) {
         storage.remove(searchIndex);
     }
 
     @Override
-    protected void insertElementInStorage(Object searchIndex, Resume resume) {
+    protected void insertElementInStorage(String searchIndex, Resume resume) {
         storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected void updateElementInStorage(Object searchIndex, Resume resume) {
-        storage.replace((String) searchIndex, storage.get(searchIndex), resume);
+    protected void updateElementInStorage(String searchIndex, Resume resume) {
+        storage.replace(searchIndex, storage.get(searchIndex), resume);
     }
 
     @Override

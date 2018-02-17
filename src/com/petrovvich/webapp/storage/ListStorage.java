@@ -4,18 +4,18 @@ import com.petrovvich.webapp.model.Resume;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage<Integer> {
 
     protected List<Resume> storage = new ArrayList<>();
 
     @Override
-    protected Resume getResumeFromStorage(Object searchIndex) {
-        return storage.get((Integer) searchIndex);
+    protected Resume getResumeFromStorage(Integer searchIndex) {
+        return storage.get(searchIndex);
     }
 
     @Override
-    protected boolean checkIndex(Object searchIndex) {
-        return (Integer) searchIndex < 0;
+    protected boolean checkIndex(Integer searchIndex) {
+        return searchIndex < 0;
     }
 
     @Override
@@ -30,18 +30,18 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void deleteResumeFromStorage(Object searchIndex) {
-        storage.remove(((Integer) searchIndex).intValue());
+    protected void deleteResumeFromStorage(Integer searchIndex) {
+        storage.remove(searchIndex.intValue());
     }
 
     @Override
-    protected void insertElementInStorage(Object searchIndex, Resume resume) {
+    protected void insertElementInStorage(Integer searchIndex, Resume resume) {
         storage.add(resume);
     }
 
     @Override
-    protected void updateElementInStorage(Object searchIndex, Resume resume) {
-        storage.set((Integer) searchIndex, resume);
+    protected void updateElementInStorage(Integer searchIndex, Resume resume) {
+        storage.set(searchIndex, resume);
     }
 
     @Override
