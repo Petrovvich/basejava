@@ -1,6 +1,5 @@
 package com.petrovvich.webapp.storage;
 
-import com.petrovvich.webapp.exception.ExistStorageException;
 import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
 
@@ -35,26 +34,16 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         sizeOfArray--;
     }
 
-    @Override
-    public void save(Resume r) {
-        Object searchIndex = getSearchIndex(r.getUuid());
-        boolean validateIndex = checkIndex(searchIndex);
-        if (!validateIndex) {
-            throw new ExistStorageException(r.getUuid());
-        } else if (size() == 10000) {
-            throw new StorageException("База резюме переполнена!", r.getUuid());
-        } else {
-            insertElementInStorage(searchIndex, r);
-        }
-    }
-
-
     protected abstract void deleteElement(int index);
 
     @Override
     protected void insertElementInStorage(Object searchIndex, Resume resume) {
-        insertElement(resume, (Integer) searchIndex);
-        sizeOfArray++;
+        if (size() == STORAGE_CAPACITY) {
+            throw new StorageException("База резюме переполнена!", resume.getUuid());
+        } else {
+            insertElement(resume, (Integer) searchIndex);
+            sizeOfArray++;
+        }
     }
 
     protected abstract void insertElement(Resume r, int index);
