@@ -11,12 +11,7 @@ public class Resume {
     private final String uuid;
     private String fullname;
     private final Map<Contacts, String> contacts = new EnumMap<>(Contacts.class);
-    private Personal personal;
-    private Objective objective;
-    private Achievement achievements;
-    private Qualification qualifications;
-    private Experience experience;
-    private Education education;
+    private final Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String uuid) {
         this.uuid = uuid;
@@ -32,6 +27,10 @@ public class Resume {
 
     public String getContact(Contacts contactType) {
         return contacts.get(contactType);
+    }
+
+    public Section getSection(SectionType sectionType) {
+        return sections.get(sectionType);
     }
 
     @Override
