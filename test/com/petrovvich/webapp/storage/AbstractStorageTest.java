@@ -3,7 +3,7 @@ package com.petrovvich.webapp.storage;
 import com.petrovvich.webapp.exception.ExistStorageException;
 import com.petrovvich.webapp.exception.NotExistStorageException;
 import com.petrovvich.webapp.exception.StorageException;
-import com.petrovvich.webapp.model.Resume;
+import com.petrovvich.webapp.model.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +30,8 @@ public abstract class AbstractStorageTest {
     private static final String UUID_3 = "uuid3";
     private static final Resume resume3 = new Resume(UUID_3);
 
+
+
     @Before
     public void setUp() throws Exception {
         storage.clear();
@@ -39,6 +41,20 @@ public abstract class AbstractStorageTest {
         resume2.setFullname("Al Pachino");
         storage.save(resume3);
         resume3.setFullname("Mark Dacascos");
+        resume1.setContact(Contacts.EMAIL);
+        resume1.setContact(Contacts.FACEBOOK);
+        resume1.setContact(Contacts.GITHUB);
+        resume1.setContact(Contacts.LINKEDIN);
+        resume1.setContact(Contacts.MOBILE_PHONE);
+        resume1.setContact(Contacts.SKYPE);
+        resume1.setContact(Contacts.TWITTER);
+        resume1.setContact(Contacts.WORK_PHONE);
+        resume1.setSection(SectionType.PERSONAL, new TextSection("Личные качества"));
+        resume1.setSection(SectionType.OBJECTIVE, new TextSection("Позиция"));
+        resume1.setSection(SectionType.ACHIEVEMENT, new TextSection("Достижения"));
+        resume1.setSection(SectionType.QUALIFICATIONS, new TextSection("Квалификация"));
+        resume1.setSection(SectionType.EXPERIENCE, new TextSection("Опыт работы"));
+        resume1.setSection(SectionType.EDUCATION, new TextSection("Образование"));
     }
 
     @Test

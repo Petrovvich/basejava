@@ -29,8 +29,16 @@ public class Resume {
         return contacts.get(contactType);
     }
 
+    public void setContact (Contacts contact) {
+        contacts.put(contact, contact.getTitle());
+    }
+
     public Section getSection(SectionType sectionType) {
         return sections.get(sectionType);
+    }
+
+    public void setSection (SectionType sectionType, Section section) {
+        sections.put(sectionType, section);
     }
 
     @Override
