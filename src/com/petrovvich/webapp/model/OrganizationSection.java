@@ -1,6 +1,6 @@
 package com.petrovvich.webapp.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,10 +42,10 @@ public class OrganizationSection extends Section {
         private final Link site;
         private final String title;
         private final String description;
-        private final Date fromDate;
-        private final Date toDate;
+        private final LocalDate fromDate;
+        private final LocalDate toDate;
 
-        public Organization(Link site, String title, String description, Date fromDate, Date toDate) {
+        public Organization(Link site, String title, String description, LocalDate fromDate, LocalDate toDate) {
             this.site = site;
             this.title = title;
             this.description = description;
