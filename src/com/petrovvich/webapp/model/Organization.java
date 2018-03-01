@@ -1,6 +1,5 @@
 package com.petrovvich.webapp.model;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 public class Organization {
@@ -8,15 +7,13 @@ public class Organization {
     private final Link site;
     private final String title;
     private final String description;
-    private final LocalDate fromDate;
-    private final LocalDate toDate;
+    private final Position[] position;
 
-    public Organization(Link site, String title, String description, LocalDate fromDate, LocalDate toDate) {
+    public Organization(Link site, String title, String description, Position... position) {
         this.site = site;
         this.title = title;
         this.description = description;
-        this.fromDate = fromDate;
-        this.toDate = toDate;
+        this.position = position;
     }
 
     @Override
@@ -25,8 +22,6 @@ public class Organization {
                 "site=" + site +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", fromDate=" + fromDate +
-                ", toDate=" + toDate +
                 '}';
     }
 
@@ -37,13 +32,11 @@ public class Organization {
         Organization that = (Organization) o;
         return Objects.equals(site, that.site) &&
                 Objects.equals(title, that.title) &&
-                Objects.equals(description, that.description) &&
-                Objects.equals(fromDate, that.fromDate) &&
-                Objects.equals(toDate, that.toDate);
+                Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(site, title, description, fromDate, toDate);
+        return Objects.hash(site, title, description);
     }
 }

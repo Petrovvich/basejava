@@ -2,7 +2,6 @@ package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.exception.ExistStorageException;
 import com.petrovvich.webapp.exception.NotExistStorageException;
-import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
 
 import java.util.Comparator;

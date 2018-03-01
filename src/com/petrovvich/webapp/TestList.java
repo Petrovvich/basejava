@@ -24,5 +24,11 @@ public class TestList {
             System.out.println("Key: " + key);
         }
 
+        String s = "123456789";
+
+        StringBuilder sb = new StringBuilder(s);
+
+        System.out.println(sb.reverse());
+
     }
 }

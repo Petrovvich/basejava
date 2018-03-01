@@ -3,19 +3,18 @@ package com.petrovvich.webapp;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Objects;
 
 public class FileTest {
 
 
     public static void getAllItems(File directory) {
-        for (File directories : directory.listFiles()) {
+        for (File directories : Objects.requireNonNull(directory.listFiles())) {
+            if (directories.isFile()) {
+                System.out.println(directories.getName());
+            }
             if (directories.isDirectory()) {
-                try {
-                    System.out.println(directories.getCanonicalPath());
-                    getAllItems(directories);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                getAllItems(directories);
             }
         }
     }
