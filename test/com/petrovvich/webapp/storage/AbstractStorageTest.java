@@ -57,19 +57,17 @@ public abstract class AbstractStorageTest {
         qualifications.add("qualification 6");
         experience.add(new Organization(new Link("site one", "http//siteone.com"),
                 "site one",
-                "site one",
-                DateUtil.of(2011, Month.JANUARY),
-                DateUtil.of(2013, Month.FEBRUARY)));
+                "site one", new Position("Manager", "Management", DateUtil.of(2011, Month.JANUARY),
+                DateUtil.of(2013, Month.FEBRUARY))));
         experience.add(new Organization(new Link("site two", "http//sitetwo.com"),
                 "site two",
-                "site two",
-                DateUtil.of(2013, Month.FEBRUARY),
-                DateUtil.of(2015, Month.MAY)));
+                "site two", new Position("Manager", "Management", DateUtil.of(2013, Month.FEBRUARY),
+                DateUtil.of(2015, Month.MAY))));
         education.add(new Organization(new Link("Massachusetts Institute of Technology: MIT", "http//http://web.mit.edu/"),
                 "MIT",
                 "Massachusetts Institute of Technology: MIT",
-                DateUtil.of(2008, Month.SEPTEMBER),
-                DateUtil.of(2011, Month.MAY)));
+                new Position("Manager", "Management",  DateUtil.of(2008, Month.SEPTEMBER),
+                        DateUtil.of(2011, Month.MAY))));
         resume1.setContact(Contacts.EMAIL);
         resume1.setContact(Contacts.FACEBOOK);
         resume1.setContact(Contacts.GITHUB);

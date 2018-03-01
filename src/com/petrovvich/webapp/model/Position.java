@@ -7,14 +7,12 @@ public class Position {
 
     private String name;
     private String description;
-    private Organization organization;
     private LocalDate fromDate;
     private LocalDate toDate;
 
-    public Position(String name, String description, Organization organization, LocalDate fromDate, LocalDate toDate) {
+    public Position(String name, String description, LocalDate fromDate, LocalDate toDate) {
         this.name = name;
         this.description = description;
-        this.organization = organization;
         this.fromDate = fromDate;
         this.toDate = toDate;
     }
@@ -33,14 +31,6 @@ public class Position {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Organization getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
     }
 
     public LocalDate getFromDate() {
@@ -66,7 +56,6 @@ public class Position {
         Position position = (Position) o;
         return Objects.equals(name, position.name) &&
                 Objects.equals(description, position.description) &&
-                Objects.equals(organization, position.organization) &&
                 Objects.equals(fromDate, position.fromDate) &&
                 Objects.equals(toDate, position.toDate);
     }
@@ -74,7 +63,7 @@ public class Position {
     @Override
     public int hashCode() {
 
-        return Objects.hash(name, description, organization, fromDate, toDate);
+        return Objects.hash(name, description, fromDate, toDate);
     }
 
     @Override
@@ -82,7 +71,6 @@ public class Position {
         return "Position{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", organization=" + organization +
                 ", fromDate=" + fromDate +
                 ", toDate=" + toDate +
                 '}';
