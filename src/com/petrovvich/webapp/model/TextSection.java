@@ -4,20 +4,20 @@ import java.util.Objects;
 
 public class TextSection extends Section {
 
-    private final String descriptiom;
+    private final String description;
 
-    public TextSection(String descriptiom) {
-        this.descriptiom = descriptiom;
+    public TextSection(String description) {
+        this.description = description;
     }
 
-    public String getDescriptiom() {
-        return descriptiom;
+    public String getdescription() {
+        return description;
     }
 
     @Override
     public String toString() {
         return "TextSection{" +
-                "descriptiom='" + descriptiom + '\'' +
+                "description='" + description + '\'' +
                 '}';
     }
 
@@ -26,12 +26,12 @@ public class TextSection extends Section {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TextSection that = (TextSection) o;
-        return Objects.equals(descriptiom, that.descriptiom);
+        return Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(descriptiom);
+        return Objects.hash(description);
     }
 }
