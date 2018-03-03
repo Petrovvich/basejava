@@ -23,8 +23,10 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected Resume getResumeFromStorage(File searchIndex) {
-        return new Resume(searchIndex.getName());
+        return readData(searchIndex);
     }
+
+    protected abstract Resume readData(File searchIndex);
 
     @Override
     protected boolean checkIndex(File searchIndex) {
@@ -38,6 +40,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void deleteResumeFromStorage(File searchIndex) {
+        if (!searchIndex.delete()) {
+            throw new StorageException("Can't delete resume", searchIndex.getName());
+        }
         searchIndex.delete();
     }
 
@@ -45,33 +50,41 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected void insertElementInStorage(File searchIndex, Resume resume) {
         try {
             searchIndex.createNewFile();
-            writeDataInResume(searchIndex, resume);
+            writeData(searchIndex, resume);
         } catch (IOException e) {
             throw new StorageException("ERROR: ", searchIndex.getName(), e);
         }
     }
 
-    protected abstract void writeDataInResume(File searchIndex, Resume resume);
+    protected abstract void writeData (File searchIndex, Resume resume);
 
     @Override
     protected void updateElementInStorage(File searchIndex, Resume resume) {
-        writeDataInResume(searchIndex, resume);
+        writeData(searchIndex, resume);
     }
 
     @Override
     protected List<Resume> getListedResumes() {
         List<Resume> result = null;
-        for (File files : Objects.requireNonNull(new File(directory.getName()).listFiles()))
-            result.add(new Resume(files.getName()));
+        try {
+            for (File files : new File(directory.getName()).listFiles())
+                result.add(getResumeFromStorage(files));
+        } catch (Exception e) {
+            throw new StorageException("ERROR: directory is not exist or empty", directory.getName(), e);
+        }
         return result;
     }
 
     @Override
     public void clear() {
-        for (File files : Objects.requireNonNull(new File(directory.getName()).listFiles())) {
-            if (files.isFile()) {
-                files.delete();
+        try {
+            for (File files : new File(directory.getName()).listFiles()) {
+                if (files.isFile()) {
+                    deleteResumeFromStorage(files);
+                }
             }
+        } catch (Exception e) {
+            throw new StorageException("ERROR: directory is not exist", directory.getName(), e);
         }
     }
 
