@@ -5,7 +5,6 @@ import com.petrovvich.webapp.model.Resume;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
