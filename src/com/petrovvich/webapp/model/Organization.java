@@ -1,5 +1,6 @@
 package com.petrovvich.webapp.model;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Organization {
@@ -7,13 +8,21 @@ public class Organization {
     private final Link site;
     private final String title;
     private final String description;
-    private final Position[] position;
+    private List<Position> positions;
 
-    public Organization(Link site, String title, String description, Position... position) {
+    public Organization(Link site, String title, String description, List<Position> position) {
         this.site = site;
         this.title = title;
         this.description = description;
-        this.position = position;
+        this.positions = position;
+    }
+
+    public void setPositions(List<Position> pos) {
+        this.positions = pos;
+    }
+
+    public List<Position> getPositions() {
+        return positions;
     }
 
     @Override
