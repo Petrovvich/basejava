@@ -47,7 +47,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         if (!searchIndex.delete()) {
             throw new StorageException("Can't delete resume", searchIndex.getName());
         }
-        searchIndex.delete();
     }
 
     @Override
@@ -74,11 +73,13 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected List<Resume> getListedResumes() {
         List<Resume> result = null;
-        try {
-            for (File files : new File(directory.getName()).listFiles())
-                result.add(getResume(files));
-        } catch (Exception e) {
-            throw new StorageException("ERROR: directory is not exist or empty", directory.getName(), e);
+        if (directory.listFiles() != null) {
+            try {
+                for (File files : directory.listFiles())
+                    result.add(getResume(files));
+            } catch (Exception e) {
+                throw new StorageException("ERROR: directory is not exist or empty", directory.getName(), e);
+            }
         }
         return result;
     }
