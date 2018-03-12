@@ -18,7 +18,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected int sizeOfArray = 0;
 
     @Override
-    protected Resume getResumeFromStorage(Integer searchIndex) {
+    protected Resume getResume(Integer searchIndex) {
         return storage[searchIndex];
     }
 
@@ -28,7 +28,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected void deleteResumeFromStorage(Integer searchIndex) {
+    protected void deleteResume(Integer searchIndex) {
         deleteElement( searchIndex);
         storage[sizeOfArray - 1] = null;
         sizeOfArray--;
@@ -37,7 +37,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected abstract void deleteElement(int index);
 
     @Override
-    protected void insertElementInStorage(Integer searchIndex, Resume resume) {
+    protected void insertElement(Integer searchIndex, Resume resume) {
         if (size() == STORAGE_CAPACITY) {
             throw new StorageException("База резюме переполнена!", resume.getUuid());
         } else {
@@ -49,7 +49,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected abstract void insertElement(Resume r, int index);
 
     @Override
-    protected void updateElementInStorage(Integer searchIndex, Resume resume) {
+    protected void updateElement(Integer searchIndex, Resume resume) {
         storage[searchIndex] = resume;
     }
 

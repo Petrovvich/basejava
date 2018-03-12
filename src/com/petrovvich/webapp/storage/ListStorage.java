@@ -9,7 +9,7 @@ public class ListStorage extends AbstractStorage<Integer> {
     protected List<Resume> storage = new ArrayList<>();
 
     @Override
-    protected Resume getResumeFromStorage(Integer searchIndex) {
+    protected Resume getResume(Integer searchIndex) {
         return storage.get(searchIndex);
     }
 
@@ -30,17 +30,17 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected void deleteResumeFromStorage(Integer searchIndex) {
+    protected void deleteResume(Integer searchIndex) {
         storage.remove(searchIndex.intValue());
     }
 
     @Override
-    protected void insertElementInStorage(Integer searchIndex, Resume resume) {
+    protected void insertElement(Integer searchIndex, Resume resume) {
         storage.add(resume);
     }
 
     @Override
-    protected void updateElementInStorage(Integer searchIndex, Resume resume) {
+    protected void updateElement(Integer searchIndex, Resume resume) {
         storage.set(searchIndex, resume);
     }
 

@@ -9,7 +9,7 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
     protected Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    protected Resume getResumeFromStorage(Resume searchIndex) {
+    protected Resume getResume(Resume searchIndex) {
         return storage.get(searchIndex.getUuid());
     }
 
@@ -24,17 +24,17 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
     }
 
     @Override
-    protected void deleteResumeFromStorage(Resume searchIndex) {
+    protected void deleteResume(Resume searchIndex) {
         storage.remove(searchIndex.getUuid());
     }
 
     @Override
-    protected void insertElementInStorage(Resume searchIndex, Resume resume) {
+    protected void insertElement(Resume searchIndex, Resume resume) {
         storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected void updateElementInStorage(Resume searchIndex, Resume resume) {
+    protected void updateElement(Resume searchIndex, Resume resume) {
         storage.replace(searchIndex.getUuid(), storage.get(searchIndex.getUuid()), resume);
     }
 

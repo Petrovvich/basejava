@@ -22,10 +22,10 @@ public abstract class AbstractStorage<SK> implements Storage {
         if (validateIndex) {
             throw new NotExistStorageException(uuid);
         }
-        return getResumeFromStorage(searchIndex);
+        return getResume(searchIndex);
     }
 
-    protected abstract Resume getResumeFromStorage(SK searchIndex);
+    protected abstract Resume getResume(SK searchIndex);
 
     protected abstract boolean checkIndex(SK searchIndex);
 
@@ -40,11 +40,11 @@ public abstract class AbstractStorage<SK> implements Storage {
             LOGGER.warning("Can't delete resume " + uuid + ". Resume is not in Storage!");
             throw new NotExistStorageException(uuid);
         } else {
-            deleteResumeFromStorage(searchIndex);
+            deleteResume(searchIndex);
         }
     }
 
-    protected abstract void deleteResumeFromStorage(SK searchIndex);
+    protected abstract void deleteResume(SK searchIndex);
 
     @Override
     public void save(Resume r) {
@@ -55,11 +55,11 @@ public abstract class AbstractStorage<SK> implements Storage {
             LOGGER.warning("Can't save resume " + r + ". Resume is already in Storage!");
             throw new ExistStorageException(r.getUuid());
         } else {
-            insertElementInStorage(searchIndex, r);
+            insertElement(searchIndex, r);
         }
     }
 
-    protected abstract void insertElementInStorage(SK searchIndex, Resume resume);
+    protected abstract void insertElement(SK searchIndex, Resume resume);
 
     public void update(Resume resume) {
         LOGGER.info("Update resume " + resume);
@@ -69,10 +69,10 @@ public abstract class AbstractStorage<SK> implements Storage {
             LOGGER.warning("Can't update resume " + resume + ". Resume is not in this Storage!");
             throw new ExistStorageException(resume.getUuid());
         }
-        updateElementInStorage(searchIndex, resume);
+        updateElement(searchIndex, resume);
     }
 
-    protected abstract void updateElementInStorage(SK searchIndex, Resume resume);
+    protected abstract void updateElement(SK searchIndex, Resume resume);
 
     public List<Resume> getAllSorted() {
         LOGGER.info("Get all sorted");

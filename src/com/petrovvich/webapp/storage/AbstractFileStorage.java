@@ -21,11 +21,16 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected Resume getResumeFromStorage(File searchIndex) {
-        return readData(searchIndex);
+    protected Resume getResume(File searchIndex) {
+        try {
+            return readData(searchIndex);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    protected abstract Resume readData(File searchIndex);
+    protected abstract Resume readData (File searchIndex) throws IOException;
 
     @Override
     protected boolean checkIndex(File searchIndex) {
@@ -38,7 +43,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected void deleteResumeFromStorage(File searchIndex) {
+    protected void deleteResume(File searchIndex) {
         if (!searchIndex.delete()) {
             throw new StorageException("Can't delete resume", searchIndex.getName());
         }
@@ -46,7 +51,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected void insertElementInStorage(File searchIndex, Resume resume) {
+    protected void insertElement(File searchIndex, Resume resume) {
         try {
             searchIndex.createNewFile();
             writeData(searchIndex, resume);
@@ -55,11 +60,15 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         }
     }
 
-    protected abstract void writeData (File searchIndex, Resume resume);
+    protected abstract void writeData (File searchIndex, Resume resume) throws IOException;
 
     @Override
-    protected void updateElementInStorage(File searchIndex, Resume resume) {
-        writeData(searchIndex, resume);
+    protected void updateElement(File searchIndex, Resume resume) {
+        try {
+            writeData(searchIndex, resume);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -67,7 +76,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         List<Resume> result = null;
         try {
             for (File files : new File(directory.getName()).listFiles())
-                result.add(getResumeFromStorage(files));
+                result.add(getResume(files));
         } catch (Exception e) {
             throw new StorageException("ERROR: directory is not exist or empty", directory.getName(), e);
         }
@@ -79,7 +88,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         try {
             for (File files : new File(directory.getName()).listFiles()) {
                 if (files.isFile()) {
-                    deleteResumeFromStorage(files);
+                    deleteResume(files);
                 }
             }
         } catch (Exception e) {
