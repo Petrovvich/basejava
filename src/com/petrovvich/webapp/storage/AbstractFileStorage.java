@@ -51,12 +51,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void insertElement(File searchIndex, Resume resume) {
-        try {
-            searchIndex.createNewFile();
-            writeData(searchIndex, resume);
-        } catch (IOException e) {
-            throw new StorageException("ERROR: ", searchIndex.getName(), e);
-        }
+            updateElement(searchIndex, resume);
     }
 
     protected abstract void writeData (File searchIndex, Resume resume) throws IOException;
