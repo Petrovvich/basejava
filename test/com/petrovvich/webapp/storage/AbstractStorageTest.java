@@ -15,13 +15,14 @@ import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 public abstract class AbstractStorageTest {
 
     protected Storage storage;
 
-    protected static final File DIRECTORY = new File("C:\\Projects\\basejava\\src\\com\\petrovvich\\webapp\\storage\\fuck");
+    protected static final File DIRECTORY = new File("C:\\Projects\\basejava\\storage");
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -101,7 +102,7 @@ public abstract class AbstractStorageTest {
         Resume resume = new Resume(UUID_1);
         storage.update(resume);
         assertSize(3);
-        Assert.assertSame(storage.get(UUID_1), resume);
+        assertTrue(resume.equals(storage.get(UUID_1)));
     }
 
     @Test
