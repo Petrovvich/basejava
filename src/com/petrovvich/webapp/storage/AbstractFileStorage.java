@@ -33,7 +33,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected boolean checkIndex(File file) {
-        return file.exists();
+        return !file.exists();
     }
 
     @Override

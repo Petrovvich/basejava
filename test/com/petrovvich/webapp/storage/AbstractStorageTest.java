@@ -3,15 +3,12 @@ package com.petrovvich.webapp.storage;
 import com.petrovvich.webapp.exception.ExistStorageException;
 import com.petrovvich.webapp.exception.NotExistStorageException;
 import com.petrovvich.webapp.model.*;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -68,7 +65,7 @@ public abstract class AbstractStorageTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         storage.clear();
         storage.save(R1);
         storage.save(R2);
@@ -76,44 +73,44 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void clear() throws Exception {
+    public void clear() {
         storage.clear();
         assertSize(0);
     }
 
     @Test
-    public void update() throws Exception {
+    public void update() {
         Resume resume = new Resume(UUID_1, "Some name");
         storage.update(resume);
         assertTrue(resume.equals(storage.get(UUID_1)));
     }
 
     @Test
-    public void save() throws Exception {
+    public void save() {
         storage.save(R4);
         assertSize(4);
         assertGet(R4);
     }
 
     @Test
-    public void get() throws Exception {
+    public void get() {
         assertGet(R1);
         assertGet(R2);
         assertGet(R3);
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void getNotExistResume() throws Exception {
+    public void getNotExistResume() {
         storage.get("putin");
     }
 
     @Test(expected = ExistStorageException.class)
-    public void saveExistResume() throws Exception {
+    public void saveExistResume() {
         storage.save(R1);
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void delete() throws Exception {
+    public void delete() {
         assertSize(3);
         storage.delete("uuid1");
         assertSize(2);
@@ -121,14 +118,14 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void getAllSorted() throws Exception {
+    public void getAllSorted() {
         List<Resume> result = storage.getAllSorted();
         assertEquals(3, result.size());
         assertEquals(result, Arrays.asList(R1, R2, R3));
     }
 
     @Test
-    public void size() throws Exception {
+    public void size() {
         assertSize(3);
     }
 
