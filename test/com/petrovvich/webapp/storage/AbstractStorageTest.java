@@ -21,7 +21,7 @@ public abstract class AbstractStorageTest {
 
     protected Storage storage;
 
-    protected static final File DIRECTORY = new File("C:\\Projects\\basejava\\src\\com\\petrovvich\\webapp\\storage");
+    protected static final File DIRECTORY = new File("C:\\Projects\\basejava\\src\\com\\petrovvich\\webapp\\storage\\fuck");
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
