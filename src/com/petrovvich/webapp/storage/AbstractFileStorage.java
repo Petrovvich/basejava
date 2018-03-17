@@ -86,14 +86,16 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        try {
-            for (File files : new File(directory.getName()).listFiles()) {
-                if (files.isFile()) {
-                    deleteResume(files);
+        if (directory.listFiles() != null) {
+            try {
+                for (File files : directory.listFiles()) {
+                    if (files.isFile()) {
+                        deleteResume(files);
+                    }
                 }
+            } catch (Exception e) {
+                throw new StorageException("ERROR: directory is not exist", directory.getName(), e);
             }
-        } catch (Exception e) {
-            throw new StorageException("ERROR: directory is not exist", directory.getName(), e);
         }
     }
 
