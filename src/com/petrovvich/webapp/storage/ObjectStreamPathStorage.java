@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public abstract class ObjectStreamPathStorage extends AbstractStorage<Path> {
+public class ObjectStreamPathStorage extends AbstractStorage<Path> {
 
     private Path directory;
 
@@ -35,7 +35,7 @@ public abstract class ObjectStreamPathStorage extends AbstractStorage<Path> {
 
     @Override
     protected boolean checkIndex(Path path) {
-        return Files.isRegularFile(path);
+        return !Files.isRegularFile(path);
     }
 
     @Override
@@ -96,7 +96,17 @@ public abstract class ObjectStreamPathStorage extends AbstractStorage<Path> {
         return directory.getNameCount();
     }
 
-    protected abstract void writeData (OutputStream os, Resume resume) throws IOException;
+    protected void writeData(OutputStream os, Resume resume) throws IOException {
+        try(ObjectOutputStream oos = new ObjectOutputStream(os)) {
+            oos.writeObject(resume);
+        }
+    }
 
-    protected abstract Resume readData (InputStream is) throws IOException;
+    protected Resume readData(InputStream is) throws IOException {
+        try (ObjectInputStream ois = new ObjectInputStream(is)) {
+            return (Resume) ois.readObject();
+        } catch (ClassNotFoundException e) {
+            throw new StorageException("Error read Resume", null, e);
+        }
+    }
 }
