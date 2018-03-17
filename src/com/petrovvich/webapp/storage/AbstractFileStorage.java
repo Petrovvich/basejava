@@ -2,8 +2,8 @@ package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
-import java.io.File;
-import java.io.IOException;
+
+import java.io.*;
 import java.util.List;
 
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
@@ -23,14 +23,14 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected Resume getResume(File searchIndex) {
         try {
-            return readData(searchIndex);
+            return readData(new BufferedInputStream(new FileInputStream(searchIndex)));
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    protected abstract Resume readData (File searchIndex) throws IOException;
+    protected abstract Resume readData (InputStream searchIndex) throws IOException;
 
     @Override
     protected boolean checkIndex(File searchIndex) {
@@ -51,20 +51,15 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void insertElement(File searchIndex, Resume resume) {
-        try {
-            searchIndex.createNewFile();
-            writeData(searchIndex, resume);
-        } catch (IOException e) {
-            throw new StorageException("ERROR: ", searchIndex.getName(), e);
-        }
+            updateElement(searchIndex, resume);
     }
 
-    protected abstract void writeData (File searchIndex, Resume resume) throws IOException;
+    protected abstract void writeData (OutputStream searchIndex, Resume resume) throws IOException;
 
     @Override
     protected void updateElement(File searchIndex, Resume resume) {
         try {
-            writeData(searchIndex, resume);
+            writeData(new BufferedOutputStream(new FileOutputStream(searchIndex)), resume);
         } catch (IOException e) {
             e.printStackTrace();
         }
