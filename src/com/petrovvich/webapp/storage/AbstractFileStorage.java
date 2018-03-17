@@ -4,6 +4,7 @@ import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
@@ -21,9 +22,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected Resume getResume(File searchIndex) {
+    protected Resume getResume(File file) {
         try {
-            return readData(new BufferedInputStream(new FileInputStream(searchIndex)));
+            return readData(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -31,8 +32,8 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected boolean checkIndex(File searchIndex) {
-        return searchIndex.exists();
+    protected boolean checkIndex(File file) {
+        return file.exists();
     }
 
     @Override
@@ -41,58 +42,62 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected void deleteResume(File searchIndex) {
-        if (!searchIndex.delete()) {
-            throw new StorageException("Can't delete resume", searchIndex.getName());
+    protected void deleteResume(File file) {
+        if (!file.delete()) {
+            throw new StorageException("Can't delete resume: ", file.getName());
         }
     }
 
     @Override
-    protected void insertElement(File searchIndex, Resume resume) {
-            updateElement(searchIndex, resume);
+    protected void insertElement(File file, Resume resume) {
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            throw new StorageException("Can't create file ", file.getAbsolutePath(), e);
+        }
+        updateElement(file, resume);
     }
 
     @Override
-    protected void updateElement(File searchIndex, Resume resume) {
+    protected void updateElement(File file, Resume resume) {
         try {
-            writeData(new BufferedOutputStream(new FileOutputStream(searchIndex)), resume);
+            writeData(new BufferedOutputStream(new FileOutputStream(file)), resume);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new StorageException(resume.getUuid(), "File can't write", e);
         }
     }
 
     @Override
     protected List<Resume> getListedResumes() {
-        List<Resume> result = null;
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException(null, "Directory is not exist or empty");
+        }
+        List<Resume> result = new ArrayList<>(files.length);
         if (directory.listFiles() != null) {
-            try {
-                for (File files : directory.listFiles())
-                    result.add(getResume(files));
-            } catch (Exception e) {
-                throw new StorageException("ERROR: directory is not exist or empty", directory.getName(), e);
-            }
+            for (File file : files)
+                    result.add(getResume(file));
         }
         return result;
     }
 
     @Override
     public void clear() {
-        if (directory.listFiles() != null) {
-            try {
-                for (File files : directory.listFiles()) {
-                    if (files.isFile()) {
-                        deleteResume(files);
-                    }
-                }
-            } catch (Exception e) {
-                throw new StorageException("ERROR: directory is not exist", directory.getName(), e);
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file: files) {
+                deleteResume(file);
             }
         }
     }
 
     @Override
     public int size() {
-        return getListedResumes().size();
+        String[] list = directory.list();
+        if (list == null) {
+            throw new StorageException("Directory is empty ", null);
+        }
+        return list.length;
     }
 
     protected abstract void writeData (OutputStream os, Resume resume) throws IOException;
