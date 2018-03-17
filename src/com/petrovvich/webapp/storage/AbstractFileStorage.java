@@ -30,8 +30,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         return null;
     }
 
-    protected abstract Resume readData (InputStream searchIndex) throws IOException;
-
     @Override
     protected boolean checkIndex(File searchIndex) {
         return searchIndex.exists();
@@ -53,8 +51,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected void insertElement(File searchIndex, Resume resume) {
             updateElement(searchIndex, resume);
     }
-
-    protected abstract void writeData (OutputStream searchIndex, Resume resume) throws IOException;
 
     @Override
     protected void updateElement(File searchIndex, Resume resume) {
@@ -98,4 +94,8 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     public int size() {
         return getListedResumes().size();
     }
+
+    protected abstract void writeData (OutputStream os, Resume resume) throws IOException;
+
+    protected abstract Resume readData (InputStream is) throws IOException;
 }

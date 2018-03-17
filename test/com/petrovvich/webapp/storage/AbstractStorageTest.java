@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,6 +20,8 @@ import static org.junit.Assert.assertEquals;
 public abstract class AbstractStorageTest {
 
     protected Storage storage;
+
+    protected static final File DIRECTORY = new File("C:\\Projects\\basejava\\src\\com\\petrovvich\\webapp\\storage");
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
