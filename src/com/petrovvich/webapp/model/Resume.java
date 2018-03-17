@@ -23,6 +23,11 @@ public class Resume implements Serializable {
         this(UUID.randomUUID().toString());
     }
 
+    public Resume(String uuid, String fullName) {
+        this.uuid = uuid;
+        this.fullname = fullName;
+    }
+
     public String getUuid() {
         return uuid;
     }
@@ -31,7 +36,7 @@ public class Resume implements Serializable {
         return contacts.get(contactType);
     }
 
-    public void setContact (Contacts contact) {
+    public void setContact (Contacts contact, String description) {
         contacts.put(contact, contact.getTitle());
     }
 

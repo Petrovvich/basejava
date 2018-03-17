@@ -3,7 +3,6 @@ package com.petrovvich.webapp.storage;
 import com.petrovvich.webapp.exception.ExistStorageException;
 import com.petrovvich.webapp.exception.NotExistStorageException;
 import com.petrovvich.webapp.model.*;
-import com.petrovvich.webapp.util.DateUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +10,7 @@ import org.junit.Test;
 import java.io.File;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -24,55 +24,55 @@ public abstract class AbstractStorageTest {
 
     protected static final File DIRECTORY = new File("C:\\Projects\\basejava\\storage");
 
+    private static final String UUID_1 = "uuid1";
+    private static final String UUID_2 = "uuid2";
+    private static final String UUID_3 = "uuid3";
+    private static final String UUID_4 = "uuid4";
+
+    private static final Resume R1;
+    private static final Resume R2;
+    private static final Resume R3;
+    private static final Resume R4;
+
+    static {
+        R1 = new Resume(UUID_1, "Name1");
+        R2 = new Resume(UUID_2, "Name2");
+        R3 = new Resume(UUID_3, "Name3");
+        R4 = new Resume(UUID_4, "Name4");
+        R1.setContact(Contacts.EMAIL, "mail1@ya.ru");
+        R1.setContact(Contacts.MOBILE_PHONE, "11111");
+        R1.setSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
+        R1.setSection(SectionType.PERSONAL, new TextSection("Personal data"));
+        R1.setSection(SectionType.ACHIEVEMENT, new ListSection("Achivment11", "Achivment12", "Achivment13"));
+        R1.setSection(SectionType.QUALIFICATIONS, new ListSection("Java", "SQL", "JavaScript"));
+        R1.setSection(SectionType.EXPERIENCE,
+                new OrganizationSection(
+                        new Organization("Organization11", "http://Organization11.ru",
+                                new Organization.Position(2005, Month.JANUARY, "position1", "content1"),
+                                new Organization.Position(2001, Month.MARCH, 2005, Month.JANUARY, "position2", "content2"))));
+        R1.setSection(SectionType.EDUCATION,
+                new OrganizationSection(
+                        new Organization("Institute", null,
+                                new Organization.Position(1996, Month.JANUARY, 2000, Month.DECEMBER, "aspirant", null),
+                                new Organization.Position(2001, Month.MARCH, 2005, Month.JANUARY, "student", "IT facultet")),
+                        new Organization("Organization12", "http://Organization12.ru")));
+        R2.setContact(Contacts.SKYPE, "skype2");
+        R2.setContact(Contacts.WORK_PHONE, "22222");
+        R1.setSection(SectionType.EXPERIENCE,
+                new OrganizationSection(
+                        new Organization("Organization2", "http://Organization2.ru",
+                                new Organization.Position(2015, Month.JANUARY, "position1", "content1"))));
+    }
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
 
-    private static final String UUID_1 = "uuid1";
-    private static final Resume resume1 = new Resume(UUID_1);
-    private static final String UUID_2 = "uuid2";
-    private static final Resume resume2 = new Resume(UUID_2);
-    private static final String UUID_3 = "uuid3";
-    private static final Resume resume3 = new Resume(UUID_3);
-    private static final List<String> achievements = new ArrayList<>();
-    private static final List<String> qualifications = new ArrayList<>();
-    private static final List<Organization> experience = new ArrayList<>();
-    private static final List<Organization> education = new ArrayList<>();
-
     @Before
     public void setUp() throws Exception {
         storage.clear();
-        storage.save(resume1);
-        resume1.setFullname("Robert De Niro");
-        storage.save(resume2);
-        resume2.setFullname("Al Pachino");
-        storage.save(resume3);
-        resume3.setFullname("Mark Dacascos");
-        achievements.add("achievement 1");
-        achievements.add("achievement 2");
-        achievements.add("achievement 3");
-        achievements.add("achievement 3");
-        achievements.add("achievement 3");
-        qualifications.add("qualification 1");
-        qualifications.add("qualification 2");
-        qualifications.add("qualification 3");
-        qualifications.add("qualification 4");
-        qualifications.add("qualification 5");
-        qualifications.add("qualification 6");
-        resume1.setContact(Contacts.EMAIL);
-        resume1.setContact(Contacts.FACEBOOK);
-        resume1.setContact(Contacts.GITHUB);
-        resume1.setContact(Contacts.LINKEDIN);
-        resume1.setContact(Contacts.MOBILE_PHONE);
-        resume1.setContact(Contacts.SKYPE);
-        resume1.setContact(Contacts.TWITTER);
-        resume1.setContact(Contacts.WORK_PHONE);
-        resume1.setSection(SectionType.PERSONAL, new TextSection("Личные качества"));
-        resume1.setSection(SectionType.OBJECTIVE, new TextSection("Позиция"));
-        resume1.setSection(SectionType.ACHIEVEMENT, new ListSection(achievements));
-        resume1.setSection(SectionType.QUALIFICATIONS, new ListSection(qualifications));
-        resume1.setSection(SectionType.EXPERIENCE, new OrganizationSection(experience));
-        resume1.setSection(SectionType.EDUCATION, new OrganizationSection(education));
+        storage.save(R1);
+        storage.save(R2);
+        storage.save(R3);
     }
 
     @Test
@@ -83,25 +83,23 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() throws Exception {
-        assertSize(3);
-        Resume resume = new Resume(UUID_1);
+        Resume resume = new Resume(UUID_1, "Some name");
         storage.update(resume);
-        assertSize(3);
         assertTrue(resume.equals(storage.get(UUID_1)));
     }
 
     @Test
     public void save() throws Exception {
-        assertSize(3);
-        Resume testResume = new Resume("123456");
-        storage.save(testResume);
+        storage.save(R4);
         assertSize(4);
-        Assert.assertSame(testResume, storage.get("123456"));
+        assertGet(R4);
     }
 
     @Test
     public void get() throws Exception {
-        Assert.assertSame(resume1, storage.get(resume1.getUuid()));
+        assertGet(R1);
+        assertGet(R2);
+        assertGet(R3);
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -111,7 +109,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = ExistStorageException.class)
     public void saveExistResume() throws Exception {
-        storage.save(resume1);
+        storage.save(R1);
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -123,19 +121,10 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void getAll() throws Exception {
-        List<Resume> result = new ArrayList<>();
-        Resume resume1 = new Resume(UUID_1);
-        resume1.setFullname("Robert De Niro");
-        result.add(resume1);
-        Resume resume2 = new Resume(UUID_2);
-        resume2.setFullname("Al Pachino");
-        result.add(resume2);
-        Resume resume3 = new Resume(UUID_3);
-        resume3.setFullname("Mark Dacascos");
-        result.add(resume3);
-        result.sort(Comparator.comparing(Resume::getUuid));
-        Assert.assertEquals(result, storage.getAllSorted());
+    public void getAllSorted() throws Exception {
+        List<Resume> result = storage.getAllSorted();
+        assertEquals(3, result.size());
+        assertEquals(result, Arrays.asList(R1, R2, R3));
     }
 
     @Test
@@ -145,5 +134,9 @@ public abstract class AbstractStorageTest {
 
     private void assertSize(int size) {
         assertEquals(size, storage.size());
+    }
+
+    private void assertGet(Resume r) {
+        assertEquals(r, storage.get(r.getUuid()));
     }
 }
