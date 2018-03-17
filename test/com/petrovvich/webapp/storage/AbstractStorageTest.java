@@ -41,11 +41,6 @@ public abstract class AbstractStorageTest {
 
     @Before
     public void setUp() throws Exception {
-        List<Organization.Position> workPos = new ArrayList<>();
-        workPos.add(new Organization.Position("Manager", "Management", DateUtil.of(2013, Month.FEBRUARY),
-                DateUtil.of(2015, Month.MAY)));
-        workPos.add(new Organization.Position("Massachusetts Institute of Technology: MIT", "MIT", DateUtil.of(2008, Month.SEPTEMBER),
-                DateUtil.of(2011, Month.MAY)));
         storage.clear();
         storage.save(resume1);
         resume1.setFullname("Robert De Niro");
@@ -64,16 +59,6 @@ public abstract class AbstractStorageTest {
         qualifications.add("qualification 4");
         qualifications.add("qualification 5");
         qualifications.add("qualification 6");
-        experience.add(new Organization(new Link("site one", "http//siteone.com"),
-                "site one",
-                "site one", workPos));
-        experience.add(new Organization(new Link("site two", "http//sitetwo.com"),
-                "site two",
-                "site two", workPos));
-        education.add(new Organization(new Link("Massachusetts Institute of Technology: MIT", "http//http://web.mit.edu/"),
-                "MIT",
-                "Massachusetts Institute of Technology: MIT",
-                workPos));
         resume1.setContact(Contacts.EMAIL);
         resume1.setContact(Contacts.FACEBOOK);
         resume1.setContact(Contacts.GITHUB);

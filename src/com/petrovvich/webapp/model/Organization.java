@@ -61,6 +61,22 @@ public class Organization implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
+        public String getName() {
+            return name;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public LocalDate getFromDate() {
+            return fromDate;
+        }
+
+        public LocalDate getToDate() {
+            return toDate;
+        }
+
         private String name;
         private String description;
         private LocalDate fromDate;

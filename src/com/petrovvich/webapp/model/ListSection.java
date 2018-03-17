@@ -1,5 +1,6 @@
 package com.petrovvich.webapp.model;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,6 +9,10 @@ public class ListSection extends Section {
     private static final long serialVersionUID = 1L;
 
     private final List<String> elements;
+
+    public ListSection(String...elements) {
+        this(Arrays.asList(elements));
+    }
 
     public ListSection(List<String> elements) {
         this.elements = elements;
