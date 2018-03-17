@@ -1,5 +1,6 @@
 package com.petrovvich.webapp.storage;
 
+import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
 
 import java.io.*;
@@ -19,6 +20,10 @@ public class ObjectStreamStorage extends AbstractFileStorage {
 
     @Override
     protected Resume readData(InputStream is) throws IOException {
-        return null;
+        try (ObjectInputStream ois = new ObjectInputStream(is)) {
+                return (Resume) ois.readObject();
+        } catch (ClassNotFoundException e) {
+                throw new StorageException("Error read Resume", null, e);
+        }
     }
 }
