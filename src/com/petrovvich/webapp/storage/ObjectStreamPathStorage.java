@@ -2,6 +2,7 @@ package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
+import com.petrovvich.webapp.storage.serialization.SerializationContext;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -14,20 +15,21 @@ import java.util.stream.Collectors;
 public class ObjectStreamPathStorage extends AbstractStorage<Path> {
 
     private Path directory;
+    private SerializationContext serializationContext;
 
-    protected ObjectStreamPathStorage(String dir) {
+    protected ObjectStreamPathStorage(String dir, SerializationContext serializationContext) {
+        this.serializationContext = serializationContext;
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must be not null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or not writeable/readable");
         }
-        this.directory = directory;
     }
 
     @Override
     protected Resume getResume(Path path) {
         try {
-            return readData(new BufferedInputStream(Files.newInputStream(path)));
+            return serializationContext.readData(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Can't get Path: ", path.getFileName().toString(), e);
         }
@@ -65,7 +67,7 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     @Override
     protected void updateElement(Path path, Resume resume) {
         try {
-            writeData(new BufferedOutputStream(Files.newOutputStream(path)), resume);
+            serializationContext.writeData(new BufferedOutputStream(Files.newOutputStream(path)), resume);
         } catch (IOException e) {
             throw new StorageException("Can't update Path: ", path.getFileName().toString(), e);
         }
@@ -78,8 +80,6 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
         } catch (IOException e) {
             throw new StorageException("Can't get all elements for directory: ", directory.getFileName().toString(), e);
         }
-
-
     }
 
     @Override
@@ -94,19 +94,5 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     @Override
     public int size() {
         return directory.getNameCount();
-    }
-
-    protected void writeData(OutputStream os, Resume resume) throws IOException {
-        try(ObjectOutputStream oos = new ObjectOutputStream(os)) {
-            oos.writeObject(resume);
-        }
-    }
-
-    protected Resume readData(InputStream is) throws IOException {
-        try (ObjectInputStream ois = new ObjectInputStream(is)) {
-            return (Resume) ois.readObject();
-        } catch (ClassNotFoundException e) {
-            throw new StorageException("Error read Resume", null, e);
-        }
     }
 }
