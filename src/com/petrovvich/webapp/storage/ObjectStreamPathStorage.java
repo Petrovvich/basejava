@@ -2,7 +2,7 @@ package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
-import com.petrovvich.webapp.storage.serialization.SerializationContext;
+import com.petrovvich.webapp.storage.serialization.SerializationStrategy;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 public class ObjectStreamPathStorage extends AbstractStorage<Path> {
 
     private Path directory;
-    private SerializationContext serializationContext;
+    private SerializationStrategy serializationStrategy;
 
-    protected ObjectStreamPathStorage(String dir, SerializationContext serializationContext) {
-        this.serializationContext = serializationContext;
+    protected ObjectStreamPathStorage(String dir, SerializationStrategy serializationStrategy) {
+        this.serializationStrategy = serializationStrategy;
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must be not null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
@@ -29,7 +29,7 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume getResume(Path path) {
         try {
-            return serializationContext.readData(new BufferedInputStream(Files.newInputStream(path)));
+            return serializationStrategy.readData(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Can't get Path: ", path.getFileName().toString(), e);
         }
@@ -67,7 +67,7 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     @Override
     protected void updateElement(Path path, Resume resume) {
         try {
-            serializationContext.writeData(new BufferedOutputStream(Files.newOutputStream(path)), resume);
+            serializationStrategy.writeData(new BufferedOutputStream(Files.newOutputStream(path)), resume);
         } catch (IOException e) {
             throw new StorageException("Can't update Path: ", path.getFileName().toString(), e);
         }
@@ -93,6 +93,11 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
 
     @Override
     public int size() {
-        return directory.getNameCount();
+        try {
+            return (int) Files.list(directory).getFilesList().count();
+        } catch (IOException e) {
+            throw new StorageException("Can't get count of elements for directory: ", directory.getFileName().toString(), e);
+        }
+        ;
     }
 }

@@ -2,6 +2,7 @@ package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
+import com.petrovvich.webapp.storage.serialization.SerializationStrategy;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,21 +11,22 @@ import java.util.List;
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     private File directory;
+    private SerializationStrategy serializationStrategy;
 
-    protected AbstractFileStorage(File directory) {
+    protected AbstractFileStorage(File directory, SerializationStrategy serializationStrategy) {
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException("Directory " + directory.getAbsolutePath() + " isn't directory!");
         }
         if (!directory.canRead() || !directory.canWrite()) {
             throw new IllegalArgumentException("Directory " + directory.getAbsolutePath() + " isn't readable/writeable!");
         }
-        this.directory = directory;
+        this.serializationStrategy = serializationStrategy;
     }
 
     @Override
     protected Resume getResume(File file) {
         try {
-            return readData(new BufferedInputStream(new FileInputStream(file)));
+            return serializationStrategy.readData(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,7 +63,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void updateElement(File file, Resume resume) {
         try {
-            writeData(new BufferedOutputStream(new FileOutputStream(file)), resume);
+            serializationStrategy.writeData(new BufferedOutputStream(new FileOutputStream(file)), resume);
         } catch (IOException e) {
             throw new StorageException(resume.getUuid(), "File can't write", e);
         }
@@ -99,8 +101,4 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         }
         return list.length;
     }
-
-    protected abstract void writeData (OutputStream os, Resume resume) throws IOException;
-
-    protected abstract Resume readData (InputStream is) throws IOException;
 }

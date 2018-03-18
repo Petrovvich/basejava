@@ -1,14 +1,25 @@
 package com.petrovvich.webapp.storage.serialization;
 
+import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
-public interface SerializationStrategy {
+public class SerializationStrategy implements Serialization {
 
-    void writeData(OutputStream os, Resume resume) throws IOException;
+    @Override
+    public void writeData(OutputStream os, Resume resume) throws IOException {
+        try(ObjectOutputStream oos = new ObjectOutputStream(os)) {
+            oos.writeObject(resume);
+        }
+    }
 
-    Resume readData(InputStream is) throws IOException;
+    @Override
+    public Resume readData(InputStream is) throws IOException {
+        try (ObjectInputStream ois = new ObjectInputStream(is)) {
+            return (Resume) ois.readObject();
+        } catch (ClassNotFoundException e) {
+            throw new StorageException("Error read Resume", null, e);
+        }
+    }
 }
