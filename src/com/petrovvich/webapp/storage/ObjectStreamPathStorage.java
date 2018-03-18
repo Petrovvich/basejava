@@ -94,10 +94,9 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     @Override
     public int size() {
         try {
-            return (int) Files.list(directory).getFilesList().count();
+            return (int) Files.list(directory).count();
         } catch (IOException e) {
             throw new StorageException("Can't get count of elements for directory: ", directory.getFileName().toString(), e);
         }
-        ;
     }
 }
