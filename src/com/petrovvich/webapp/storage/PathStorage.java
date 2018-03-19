@@ -2,7 +2,8 @@ package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
-import com.petrovvich.webapp.storage.serialization.SerializationStrategy;
+import com.petrovvich.webapp.storage.serialization.ObjectStreamSerialization;
+import com.petrovvich.webapp.storage.serialization.Serialization;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -12,13 +13,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class ObjectStreamPathStorage extends AbstractStorage<Path> {
+public class PathStorage extends AbstractStorage<Path> {
 
     private Path directory;
-    private SerializationStrategy serializationStrategy;
+    private Serialization objectStreamSerialization;
 
-    protected ObjectStreamPathStorage(String dir, SerializationStrategy serializationStrategy) {
-        this.serializationStrategy = serializationStrategy;
+    protected PathStorage(String dir, Serialization objectStreamSerialization) {
+        this.objectStreamSerialization = objectStreamSerialization;
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must be not null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
@@ -29,7 +30,7 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume getResume(Path path) {
         try {
-            return serializationStrategy.readData(new BufferedInputStream(Files.newInputStream(path)));
+            return objectStreamSerialization.readData(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Can't get Path: ", path.getFileName().toString(), e);
         }
@@ -67,7 +68,7 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     @Override
     protected void updateElement(Path path, Resume resume) {
         try {
-            serializationStrategy.writeData(new BufferedOutputStream(Files.newOutputStream(path)), resume);
+            objectStreamSerialization.writeData(new BufferedOutputStream(Files.newOutputStream(path)), resume);
         } catch (IOException e) {
             throw new StorageException("Can't update Path: ", path.getFileName().toString(), e);
         }

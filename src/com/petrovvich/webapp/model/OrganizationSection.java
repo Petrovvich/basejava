@@ -6,7 +6,9 @@ import java.util.Objects;
 
 public class OrganizationSection extends Section {
 
-    private final List<Organization> organizationsList;
+    private List<Organization> organizationsList;
+
+    public OrganizationSection() {}
 
     public OrganizationSection(Organization... organizations) {
         this(Arrays.asList(organizations));

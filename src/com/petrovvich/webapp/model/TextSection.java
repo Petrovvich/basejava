@@ -6,7 +6,9 @@ public class TextSection extends Section {
 
     private static final long serialVersionUID = 1L;
 
-    private final String description;
+    private String description;
+
+    public TextSection() {}
 
     public TextSection(String description) {
         this.description = description;

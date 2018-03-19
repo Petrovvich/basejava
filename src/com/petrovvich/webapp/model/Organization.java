@@ -1,5 +1,10 @@
 package com.petrovvich.webapp.model;
 
+import com.petrovvich.webapp.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
@@ -10,12 +15,15 @@ import java.util.Objects;
 import static com.petrovvich.webapp.util.DateUtil.NOW;
 import static com.petrovvich.webapp.util.DateUtil.of;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final Link site;
+    private Link site;
     private List<Position> positions;
+
+    public Organization() {}
 
     public Organization(String name, String url, Position...positions) {
         this(new Link(name, url), Arrays.asList(positions));
@@ -56,10 +64,34 @@ public class Organization implements Serializable {
                 ", positions=" + positions +
                 '}';
     }
-
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Position implements Serializable {
 
         private static final long serialVersionUID = 1L;
+
+        private String name;
+        private String description;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate fromDate;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate toDate;
+
+        public Position() {}
+
+        public Position(int startYear, Month startMonth, String name, String description) {
+            this(of(startYear, startMonth), NOW, name, description);
+        }
+
+        public Position(int startYear, Month startMonth, int endYear, Month endMonth, String name, String description) {
+            this(of(startYear, startMonth), of(endYear, endMonth), name, description);
+        }
+
+        public Position(LocalDate fromDate, LocalDate toDate, String name, String description) {
+            this.fromDate = fromDate;
+            this.toDate = toDate;
+            this.name = name;
+            this.description = description;
+        }
 
         public String getName() {
             return name;
@@ -75,26 +107,6 @@ public class Organization implements Serializable {
 
         public LocalDate getToDate() {
             return toDate;
-        }
-
-        private String name;
-        private String description;
-        private LocalDate fromDate;
-        private LocalDate toDate;
-
-        public Position(int startYear, Month startMonth, String name, String description) {
-            this(of(startYear, startMonth), NOW, name, description);
-        }
-
-        public Position(int startYear, Month startMonth, int endYear, Month endMonth, String name, String description) {
-            this(of(startYear, startMonth), of(endYear, endMonth), name, description);
-        }
-
-        public Position(LocalDate fromDate, LocalDate toDate, String name, String description) {
-            this.fromDate = fromDate;
-            this.toDate = toDate;
-            this.name = name;
-            this.description = description;
         }
 
         @Override

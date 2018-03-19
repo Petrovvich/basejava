@@ -2,7 +2,7 @@ package com.petrovvich.webapp.storage;
 
 import com.petrovvich.webapp.exception.StorageException;
 import com.petrovvich.webapp.model.Resume;
-import com.petrovvich.webapp.storage.serialization.SerializationStrategy;
+import com.petrovvich.webapp.storage.serialization.ObjectStreamSerialization;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -11,22 +11,22 @@ import java.util.List;
 public abstract class FileStorage extends AbstractStorage<File> {
 
     private File directory;
-    private SerializationStrategy serializationStrategy;
+    private ObjectStreamSerialization objectStreamSerialization;
 
-    protected FileStorage(File directory, SerializationStrategy serializationStrategy) {
+    protected FileStorage(File directory, ObjectStreamSerialization objectStreamSerialization) {
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException("Directory " + directory.getAbsolutePath() + " isn't directory!");
         }
         if (!directory.canRead() || !directory.canWrite()) {
             throw new IllegalArgumentException("Directory " + directory.getAbsolutePath() + " isn't readable/writeable!");
         }
-        this.serializationStrategy = serializationStrategy;
+        this.objectStreamSerialization = objectStreamSerialization;
     }
 
     @Override
     protected Resume getResume(File file) {
         try {
-            return serializationStrategy.readData(new BufferedInputStream(new FileInputStream(file)));
+            return objectStreamSerialization.readData(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("Can't get resume: ", file.getName(), e);
         }
@@ -62,7 +62,7 @@ public abstract class FileStorage extends AbstractStorage<File> {
     @Override
     protected void updateElement(File file, Resume resume) {
         try {
-            serializationStrategy.writeData(new BufferedOutputStream(new FileOutputStream(file)), resume);
+            objectStreamSerialization.writeData(new BufferedOutputStream(new FileOutputStream(file)), resume);
         } catch (IOException e) {
             throw new StorageException(resume.getUuid(), "File can't write", e);
         }

@@ -5,7 +5,7 @@ import com.petrovvich.webapp.model.Resume;
 
 import java.io.*;
 
-public class SerializationStrategy implements Serialization {
+public class ObjectStreamSerialization implements Serialization {
 
     @Override
     public void writeData(OutputStream os, Resume resume) throws IOException {

@@ -1,26 +1,29 @@
 package com.petrovvich.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    // Unique identifier
-    private final String uuid;
+
+    private String uuid;
     private String fullname;
     private final Map<Contacts, String> contacts = new EnumMap<>(Contacts.class);
     private final Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
-    public Resume(String uuid) {
-        this.uuid = uuid;
-    }
+    public Resume() {}
 
-    public Resume() {
-        this(UUID.randomUUID().toString());
+    public Resume(String fullname) {
+        this(UUID.randomUUID().toString(), fullname);
     }
 
     public Resume(String uuid, String fullName) {
@@ -60,22 +63,25 @@ public class Resume implements Serializable {
         return fullname;
     }
 
+
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
         return Objects.equals(uuid, resume.uuid) &&
-                Objects.equals(fullname, resume.fullname);
+                Objects.equals(fullname, resume.fullname) &&
+                Objects.equals(contacts, resume.contacts) &&
+                Objects.equals(sections, resume.sections);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(uuid, fullname);
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+        return Objects.hash(uuid, fullname, contacts, sections);
     }
 }
