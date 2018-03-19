@@ -8,12 +8,12 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
+public abstract class FileStorage extends AbstractStorage<File> {
 
     private File directory;
     private SerializationStrategy serializationStrategy;
 
-    protected AbstractFileStorage(File directory, SerializationStrategy serializationStrategy) {
+    protected FileStorage(File directory, SerializationStrategy serializationStrategy) {
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException("Directory " + directory.getAbsolutePath() + " isn't directory!");
         }
@@ -28,9 +28,8 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         try {
             return serializationStrategy.readData(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new StorageException("Can't get resume: ", file.getName(), e);
         }
-        return null;
     }
 
     @Override
