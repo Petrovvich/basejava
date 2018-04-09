@@ -95,10 +95,15 @@ public class DataStreamSerialization implements Serialization {
                     int positionsList = dis.readInt();
                     List<Organization.Position> positions = new ArrayList<>();
                     for (int k = 0; k < positionsList; k++) {
-                        positions.add(new Organization.Position(dis.readUTF());
+                        String description = dis.readUTF();
+                        String name = dis.readUTF();
+                        LocalDate fromDate = LocalDate.parse(dis.readUTF());
+                        LocalDate toDate = LocalDate.parse(dis.readUTF());
+                        positions.add(new Organization.Position(fromDate, toDate, description, name);
                     }
                     organizations.add(new Organization(positions));
                 }
+                resume.setSection(sectionType, new OrganizationSection(organizations));
             }
             }
             return resume;
