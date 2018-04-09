@@ -51,6 +51,14 @@ public class Resume implements Serializable {
         sections.put(sectionType, section);
     }
 
+    public Map<Contacts, String> getContacts() {
+        return contacts;
+    }
+
+    public Map<SectionType, Section> getSections() {
+        return sections;
+    }
+
     @Override
     public String toString() {
         return "Resume{" +
@@ -82,6 +90,7 @@ public class Resume implements Serializable {
 
     @Override
     public int hashCode() {
+
         return Objects.hash(uuid, fullname, contacts, sections);
     }
 }
