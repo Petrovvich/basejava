@@ -29,32 +29,41 @@ public class DataStreamSerialization implements Serialization {
                 SectionType sectionType = entry.getKey();
                 Section section = entry.getValue();
                 dos.writeUTF(sectionType.name());
-                //for Text Sections
-                if (sectionType == SectionType.PERSONAL || sectionType == SectionType.OBJECTIVE) {
-                    dos.writeUTF(((TextSection) section).getdescription());
-                }
-                //for List Sections
-                if (sectionType == SectionType.ACHIEVEMENT || sectionType == SectionType.QUALIFICATIONS) {
-                    List<String> listSection = ((ListSection)section).getElements();
-                    dos.writeInt(listSection.size());
-                    for (String s : listSection) {
-                        dos.writeUTF(s);
-                    }
-                }
-                //for Organization sections
-                if (sectionType == SectionType.EXPERIENCE || sectionType == SectionType.EDUCATION) {
-                    List<Organization> organizationList = ((OrganizationSection)section).getOrganizationsList();
-                    dos.writeInt(organizationList.size());
-                    for (Organization o : organizationList) {
-                        List<Organization.Position> positions = new ArrayList<>();
-                        dos.writeInt(positions.size());
-                        for (Organization.Position p : positions) {
-                            dos.writeUTF(p.getDescription());
-                            dos.writeUTF(p.getName());
-                            dos.writeUTF(String.valueOf(p.getFromDate()));
-                            dos.writeUTF(String.valueOf(p.getToDate()));
+
+                switch (sectionType) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        dos.writeUTF(((TextSection) section).getdescription());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        List<String> listSection = ((ListSection)section).getElements();
+                        dos.writeInt(listSection.size());
+                        for (String s : listSection) {
+                            dos.writeUTF(s);
                         }
-                    }
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        List<Organization> organizationList = ((OrganizationSection)section).getOrganizationsList();
+                        dos.writeInt(organizationList.size());
+                        for (Organization o : organizationList) {
+                            List<Organization.Position> positions = new ArrayList<>();
+                            dos.writeInt(positions.size());
+                            if (o.getSite() == null) {
+                                dos.writeUTF("");
+                            } else {
+                                dos.writeUTF(o.getSite().getName());
+                                dos.writeUTF(o.getSite().getUrl());
+                            }
+                            for (Organization.Position p : positions) {
+                                dos.writeUTF(p.getDescription() == null ? "" : p.getDescription());
+                                dos.writeUTF(p.getName());
+                                dos.writeUTF(String.valueOf(p.getFromDate()));
+                                dos.writeUTF(String.valueOf(p.getToDate()));
+                            }
+                        }
+                        break;
                 }
             }
         }
@@ -76,35 +85,36 @@ public class DataStreamSerialization implements Serialization {
             int sizeSections = dis.readInt();
             for (int i = 0; i < sizeSections; i++) {
             SectionType sectionType = SectionType.valueOf(dis.readUTF());
-            //for Text Sections
-            if (sectionType == SectionType.PERSONAL || sectionType == SectionType.OBJECTIVE) {
-                resume.setSection(sectionType, new TextSection(dis.readUTF()));
-            }
-            //for List Sections
-            if (sectionType == SectionType.ACHIEVEMENT || sectionType == SectionType.QUALIFICATIONS) {
-                int listSize = dis.readInt();
-                for (int j = 0; j < listSize; j++) {
-                    resume.setSection(sectionType, new ListSection(dis.readUTF()));
-                }
-            }
-            //for Organization sections
-            if (sectionType == SectionType.EXPERIENCE || sectionType == SectionType.EDUCATION) {
-                int organizationList = dis.readInt();
-                List<Organization> organizations = new ArrayList<>();
-                for (int j = 0; j < organizationList; j++) {
-                    int positionsList = dis.readInt();
-                    List<Organization.Position> positions = new ArrayList<>();
-                    for (int k = 0; k < positionsList; k++) {
-                        String description = dis.readUTF();
-                        String name = dis.readUTF();
-                        LocalDate fromDate = LocalDate.parse(dis.readUTF());
-                        LocalDate toDate = LocalDate.parse(dis.readUTF());
-                        positions.add(new Organization.Position(fromDate, toDate, description, name);
+            switch(sectionType) {
+                case PERSONAL:
+                case OBJECTIVE:
+                    resume.setSection(sectionType, new TextSection(dis.readUTF()));
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    int listSize = dis.readInt();
+                    for (int j = 0; j < listSize; j++) {
+                        resume.setSection(sectionType, new ListSection(dis.readUTF()));
                     }
-                    organizations.add(new Organization(positions));
+                case EXPERIENCE:
+                case EDUCATION:
+                    int organizationList = dis.readInt();
+                    List<Organization> organizations = new ArrayList<>();
+                    for (int j = 0; j < organizationList; j++) {
+                        int positionsList = dis.readInt();
+                        String linkDesc = dis.readUTF();
+                        String linkUrl = dis.readUTF();
+                        List<Organization.Position> positions = new ArrayList<>();
+                        for (int k = 0; k < positionsList; k++) {
+                            String description = dis.readUTF();
+                            String name = dis.readUTF();
+                            LocalDate fromDate = LocalDate.parse(dis.readUTF());
+                            LocalDate toDate = LocalDate.parse(dis.readUTF());
+                            positions.add(new Organization.Position(fromDate, toDate, description, name));
+                        }
+                        organizations.add(new Organization(new Link(linkDesc, linkUrl), positions));
+                    }
+                    resume.setSection(sectionType, new OrganizationSection(organizations));
                 }
-                resume.setSection(sectionType, new OrganizationSection(organizations));
-            }
             }
             return resume;
         }

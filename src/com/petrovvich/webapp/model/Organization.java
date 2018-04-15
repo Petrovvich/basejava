@@ -20,6 +20,14 @@ public class Organization implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public Link getSite() {
+        return site;
+    }
+
+    public void setSite(Link site) {
+        this.site = site;
+    }
+
     private Link site;
     private List<Position> positions;
 
