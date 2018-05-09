@@ -1,14 +1,19 @@
 package com.petrovvich.webapp.storage.serialization;
 
 import com.petrovvich.webapp.model.*;
+import com.petrovvich.webapp.storage.AbstractStorage;
 
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class DataStreamSerialization implements Serialization {
+
+    private static final Logger LOGGER = Logger.getLogger(AbstractStorage.class.getName());
 
     @Override
     public void writeData(OutputStream os, Resume resume) throws IOException {
@@ -39,6 +44,7 @@ public class DataStreamSerialization implements Serialization {
                     case QUALIFICATIONS:
                         List<String> listSection = ((ListSection)section).getElements();
                         dos.writeInt(listSection.size());
+                        LOGGER.info("Writing listSize is: " + listSection.size());
                         for (String s : listSection) {
                             dos.writeUTF(s);
                         }
@@ -50,17 +56,15 @@ public class DataStreamSerialization implements Serialization {
                         for (Organization o : organizationList) {
                             List<Organization.Position> positions = new ArrayList<>();
                             dos.writeInt(positions.size());
-                            if (o.getSite() == null) {
-                                dos.writeUTF("");
-                            } else {
+                            if (positions.size() > 0) {
                                 dos.writeUTF(o.getSite().getName());
                                 dos.writeUTF(o.getSite().getUrl());
-                            }
-                            for (Organization.Position p : positions) {
-                                dos.writeUTF(p.getDescription() == null ? "" : p.getDescription());
-                                dos.writeUTF(p.getName());
-                                dos.writeUTF(String.valueOf(p.getFromDate()));
-                                dos.writeUTF(String.valueOf(p.getToDate()));
+                                for (Organization.Position p : positions) {
+                                    dos.writeUTF(p.getDescription() == null ? "" : p.getDescription());
+                                    dos.writeUTF(p.getName());
+                                    dos.writeUTF(String.valueOf(p.getFromDate()));
+                                    dos.writeUTF(String.valueOf(p.getToDate()));
+                                }
                             }
                         }
                         break;
@@ -83,37 +87,51 @@ public class DataStreamSerialization implements Serialization {
             }
 
             int sizeSections = dis.readInt();
+            LOGGER.info("Reading sizeSections is: " + sizeSections);
             for (int i = 0; i < sizeSections; i++) {
             SectionType sectionType = SectionType.valueOf(dis.readUTF());
+            LOGGER.info("Section types is: " + sectionType);
             switch(sectionType) {
                 case PERSONAL:
                 case OBJECTIVE:
                     resume.setSection(sectionType, new TextSection(dis.readUTF()));
+                    break;
                 case ACHIEVEMENT:
                 case QUALIFICATIONS:
                     int listSize = dis.readInt();
+                    List<String> strings = new ArrayList<>(listSize);
                     for (int j = 0; j < listSize; j++) {
-                        resume.setSection(sectionType, new ListSection(dis.readUTF()));
+                        LOGGER.info("Reading listSize is: " + listSize);
+                        strings.add(dis.readUTF());
                     }
+                    resume.setSection(sectionType, new ListSection(strings));
+                    break;
                 case EXPERIENCE:
                 case EDUCATION:
                     int organizationList = dis.readInt();
-                    List<Organization> organizations = new ArrayList<>();
-                    for (int j = 0; j < organizationList; j++) {
-                        int positionsList = dis.readInt();
-                        String linkDesc = dis.readUTF();
-                        String linkUrl = dis.readUTF();
-                        List<Organization.Position> positions = new ArrayList<>();
-                        for (int k = 0; k < positionsList; k++) {
-                            String description = dis.readUTF();
-                            String name = dis.readUTF();
-                            LocalDate fromDate = LocalDate.parse(dis.readUTF());
-                            LocalDate toDate = LocalDate.parse(dis.readUTF());
-                            positions.add(new Organization.Position(fromDate, toDate, description, name));
+                    LOGGER.info("organizationList is: " + organizationList);
+                    List<Organization> organizations = new ArrayList<>(organizationList);
+                    if (organizationList > 0 ) {
+                        for (int j = 0; j < organizationList; j++) {
+                            int positionsList = dis.readInt();
+                            LOGGER.info("positionsList is: " + positionsList);
+                            if (positionsList > 0) {
+                                String linkDesc = dis.readUTF();
+                                String linkUrl = dis.readUTF();
+                                List<Organization.Position> positions = new ArrayList<>();
+                                for (int k = 0; k < positionsList; k++) {
+                                    String description = dis.readUTF();
+                                    String name = dis.readUTF();
+                                    LocalDate fromDate = LocalDate.parse(dis.readUTF());
+                                    LocalDate toDate = LocalDate.parse(dis.readUTF());
+                                    positions.add(new Organization.Position(fromDate, toDate, description, name));
+                                }
+                                organizations.add(new Organization(new Link(linkDesc, linkUrl), positions));
+                            }
                         }
-                        organizations.add(new Organization(new Link(linkDesc, linkUrl), positions));
                     }
-                    resume.setSection(sectionType, new OrganizationSection(organizations));
+                        resume.setSection(sectionType, new OrganizationSection(organizations));
+                    break;
                 }
             }
             return resume;

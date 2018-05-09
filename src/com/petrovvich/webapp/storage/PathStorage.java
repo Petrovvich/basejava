@@ -11,12 +11,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class PathStorage extends AbstractStorage<Path> {
 
     private Path directory;
     private Serialization objectStreamSerialization;
+    private static final Logger LOGGER = Logger.getLogger(AbstractStorage.class.getName());
 
     protected PathStorage(String dir, Serialization objectStreamSerialization) {
         this.objectStreamSerialization = objectStreamSerialization;
@@ -30,6 +32,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume getResume(Path path) {
         try {
+            LOGGER.info("Path is: " + path);
             return objectStreamSerialization.readData(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Can't get Path: ", path.getFileName().toString(), e);
