@@ -56,11 +56,11 @@ public class DataStreamSerialization implements Serialization {
                         for (Organization o : organizationList) {
                             List<Organization.Position> positions = new ArrayList<>();
                             dos.writeInt(positions.size());
+                            dos.writeUTF(o.getSite().getName());
+                            dos.writeUTF(o.getSite().getUrl());
                             if (positions.size() > 0) {
-                                dos.writeUTF(o.getSite().getName());
-                                dos.writeUTF(o.getSite().getUrl());
                                 for (Organization.Position p : positions) {
-                                    dos.writeUTF(p.getDescription() == null ? "" : p.getDescription());
+                                    dos.writeUTF(p.getDescription());
                                     dos.writeUTF(p.getName());
                                     dos.writeUTF(String.valueOf(p.getFromDate()));
                                     dos.writeUTF(String.valueOf(p.getToDate()));
@@ -115,9 +115,9 @@ public class DataStreamSerialization implements Serialization {
                         for (int j = 0; j < organizationList; j++) {
                             int positionsList = dis.readInt();
                             LOGGER.info("positionsList is: " + positionsList);
+                            String linkDesc = dis.readUTF();
+                            String linkUrl = dis.readUTF();
                             if (positionsList > 0) {
-                                String linkDesc = dis.readUTF();
-                                String linkUrl = dis.readUTF();
                                 List<Organization.Position> positions = new ArrayList<>();
                                 for (int k = 0; k < positionsList; k++) {
                                     String description = dis.readUTF();

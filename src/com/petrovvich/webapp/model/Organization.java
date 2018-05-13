@@ -98,7 +98,7 @@ public class Organization implements Serializable {
             this.fromDate = fromDate;
             this.toDate = toDate;
             this.name = name;
-            this.description = description;
+            this.description = description == null ? "" : description;
         }
 
         public String getName() {
